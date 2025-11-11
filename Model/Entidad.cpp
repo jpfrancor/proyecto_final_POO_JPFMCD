@@ -6,14 +6,12 @@
 #include "Entidad.h" // Incluimos el archivo de cabecera que acabamos de definir
 #include <algorithm> // Útil para lógica futura
 
-// NOTA: Para que compile este archivo, necesitas incluir la clase Heroe.h
-// y Item.h. Asumimos que existen en la carpeta /Modelo.
-//#include "Heroe.h"
-//#include "Item.h"
+//#include "Heroe.h" ====== IMPORTANTE =====
+#include "Item.h"
 
 // Constructor
 Entidad::Entidad(std::string nombre, std::string descripcion, int hp, int atk, int def)
-    : nombre(nombre), // Se usa std::move para optimización
+    : nombre(nombre),
       descripcion(descripcion),
       puntosDeVida(hp),
       ataque(atk),

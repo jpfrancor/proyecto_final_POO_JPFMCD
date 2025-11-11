@@ -9,7 +9,7 @@
 #include <vector>
 #include <string>
 
-//#include "Item.h"
+#include "Item.h" //Se incluye el item para que el programa sepa que se utiliza
 
 class Entidad {
 protected: //Van con protectec para que sólo los hijos puedan acceder a estos atributos

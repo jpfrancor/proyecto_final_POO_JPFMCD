@@ -8,4 +8,6 @@ add_executable(proyectoFinalPOO main.cpp
         Model/Entidad.h
         Model/Entidad.h
         Model/Entidad.cpp
+        Model/Item.cpp
+        Model/Item.h
 )
