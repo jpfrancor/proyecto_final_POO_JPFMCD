@@ -21,7 +21,7 @@ Entidad::Entidad(std::string nombre, std::string descripcion, int hp, int atk, i
     std::cout << "Enhorabuena! " << this->nombre << " ha aparecido." << std::endl;
 }
 
-// Implementación del método morir.
+// Implementación del metodo morir.
 // Usa una referencia (&) al Heroe que derrotó a esta entidad (enemigo)
 void Entidad::morir(Heroe& heroe) { // Esta es la lógica central para el despojo (loot) de enemigos
     std::cout << this->nombre << " ha sido derrotado." << std::endl; // 1. Lógica de drops: Itera sobre el inventario del enemigo.
@@ -34,7 +34,7 @@ void Entidad::morir(Heroe& heroe) { // Esta es la lógica central para el despoj
     // Es importante NOTA: El puntero al Item se mueve al Heroe, no se borra.
 }
 
-// Implementación del método para añadir objetos al inventario
+// Implementación del mtodo para añadir objetos al inventario
 void Entidad::agregarItemInventario(Item* item) {
     inventario.push_back(item);
     std::cout << "Se agregó " << item->getNombre() << " al inventario de " << this->nombre << "." << std::endl;
