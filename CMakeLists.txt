@@ -10,4 +10,8 @@ add_executable(proyectoFinalPOO main.cpp
         Model/Entidad.cpp
         Model/Item.cpp
         Model/Item.h
+        Model/Entidad.h
+        Model/Entidad.h
+        Model/Heroe.cpp
+        Model/Heroe.h
 )
