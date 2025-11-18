@@ -11,17 +11,16 @@
 // ======================= CONSTRUCTOR =========================
 
 Guardia::Guardia(std::string nombre, std::string descripcion, int pv, int atk, int def)
-    // 1. Inicialización de la clase base (Entidad)
     : Entidad(std::move(nombre), std::move(descripcion), pv, atk, def)
 {
     std::cout << "Un Guardia hostil ha aparecido: " << this->nombre << "." << std::endl;
 
     // 2. Inventario del Guardia
 
-    // Items base (Curativos)
+    // Items base
     this->inventario.push_back(new Curativo("Hierbas", 5));
     this->inventario.push_back(new Curativo("Vendas", 10));
-    this->inventario.push_back(new Curativo("Pocion de Curacion", 25)); // Específico del Guardia
+    this->inventario.push_back(new Curativo("Pocion de Curacion", 25));
 
 
     this->inventario.push_back(new Arma("Espada Larga", 15));
