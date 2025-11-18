@@ -17,7 +17,7 @@ public:
     ~Guardia() override = default;
 
     // --- Métodos puros virtuales---
-    // Implementación de la accion específicas del Guardia.
+    // Implementación de la accion específica del Guardia.
     void movimiento1() override;
 
 

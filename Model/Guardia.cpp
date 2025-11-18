@@ -5,7 +5,6 @@
 #include "Guardia.h"
 #include <iostream>
 #include <utility>
-// Asumimos que estas clases ya existen o serán creadas (heredan de Item)
 #include "Curativo.h"
 #include "Arma.h"
 
