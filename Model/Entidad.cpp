@@ -6,7 +6,7 @@
 #include "Entidad.h" // Incluimos el archivo de cabecera que acabamos de definir
 #include <algorithm> // Útil para lógica futura
 
-//#include "Heroe.h" ====== IMPORTANTE =====
+#include "Heroe.h"
 #include "Item.h"
 
 // Constructor

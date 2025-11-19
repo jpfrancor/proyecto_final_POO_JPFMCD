@@ -51,7 +51,7 @@ void Heroe::subirDeNivel() {
 
 // ======================= MÉTODOS PÚROS =========================
 
-void Heroe::movimiento1() {
+void Heroe::movimiento1(Entidad& objetivo) {
     std::cout << this->nombre << " realiza un Ataque Básico." << std::endl;
 
 }

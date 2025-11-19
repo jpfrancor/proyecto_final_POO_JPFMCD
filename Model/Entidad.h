@@ -30,7 +30,7 @@ public:
     virtual ~Entidad() = default;
 
     //Ataques, serán modificados para cada clase heredada. Como Pokémon.
-    virtual void movimiento1(Heroe& objetivo) = 0;
+    virtual void movimiento1(Entidad& objetivo) = 0;
 
     //Se crea virtual ya que el héroe muere de forma distinta a los enemigos (los cuales botan objetos)
     virtual void morir(Heroe& heroe);

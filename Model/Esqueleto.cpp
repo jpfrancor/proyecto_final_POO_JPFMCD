@@ -28,7 +28,7 @@ Esqueleto::Esqueleto(std::string nombre, std::string descripcion, int pv, int at
 
 // ======================= MÉTODOS PÚROS =========================
 
-void Esqueleto::movimiento1(Heroe& objetivo) {
+void Esqueleto::movimiento1(Entidad& objetivo) {
     std::cout << this->nombre << " ataca con su Hueso Roto." << std::endl;
     objetivo.recibirDanio(this->ataque);
 }

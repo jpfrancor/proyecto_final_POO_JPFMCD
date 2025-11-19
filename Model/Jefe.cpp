@@ -18,7 +18,7 @@ Jefe::Jefe(std::string nombre, std::string descripcion, int hp, int atk, int def
 
 // ======================= MÉTODOS DE ATAQUE SOBRESCRITOS =========================
 
-void Jefe::movimiento1(Heroe& objetivo) {
+void Jefe::movimiento1(Entidad& objetivo) {
     // Usamos rand() para simular la elección entre 3 ataques diferentes del Jefe.
     int ataqueElegido = rand() % 3; // Genera 0, 1 o 2
 

@@ -16,7 +16,7 @@ public:
     Jefe(std::string nombre, std::string descripcion, int hp, int atk, int def);
 
     // Sobrescritura obligatoria con el objetivo (Heroe&)
-    void movimiento1(Heroe& objetivo) override;
+    void movimiento1(Entidad& objetivo) override;
 
     // Aquí irían otros métodos específicos si fueran necesarios...
 
