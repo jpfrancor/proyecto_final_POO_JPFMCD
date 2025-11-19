@@ -10,7 +10,6 @@
 
 // Llama al constructor de la clase base (Entidad) y luego inicializa los atributos propios.
 Heroe::Heroe(std::string nombre, std::string descripcion, int pv, int atk, int def)
-    // 1. Inicialización de la clase base (Entidad)
     : Entidad(std::move(nombre), std::move(descripcion), pv, atk, def),
       // 2. Inicialización de atributos propios (Heroe comienza en Nivel 1, EXP 0)
       nivel(1),
@@ -22,7 +21,7 @@ Heroe::Heroe(std::string nombre, std::string descripcion, int pv, int atk, int d
 // ======================= SUBIDA DE NIVEL =========================
 
 void Heroe::ganarExperiencia(int expObtenida) {
-    if (nivel >= maxNivelL) {
+    if (nivel >= maxNivel) {
         // No se gana más experiencia si se alcanzó el nivel máximo.
         std::cout << this->nombre << " ha alcanzado el nivel máximo (" << maxNivel << ")." << std::endl;
         return;
@@ -52,7 +51,7 @@ void Heroe::subirDeNivel() {
 
 // ======================= MÉTODOS PÚROS =========================
 
-void Heroe::movimiento1() {
+void Heroe::movimiento1(Entidad& objetivo) {
     std::cout << this->nombre << " realiza un Ataque Básico." << std::endl;
 
 }

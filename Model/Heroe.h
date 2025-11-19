@@ -24,7 +24,7 @@ public:
 
     // --- Métodos puros virtuales ---
     // Implementación de la accion del héroe que el usuario puede elegir.
-    void movimiento1() override;
+    void movimiento1(Entidad& objetivo) override;
 
     // --- Sobrescritura de Comportamiento ---
 

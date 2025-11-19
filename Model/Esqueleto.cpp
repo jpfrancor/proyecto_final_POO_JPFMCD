@@ -28,8 +28,8 @@ Esqueleto::Esqueleto(std::string nombre, std::string descripcion, int pv, int at
 
 // ======================= MÉTODOS PÚROS =========================
 
-void Esqueleto::movimiento1() {
+void Esqueleto::movimiento1(Entidad& objetivo) {
     std::cout << this->nombre << " ataca con su Hueso Roto." << std::endl;
-    // Lógica para el ataque más débil
+    objetivo.recibirDanio(this->ataque);
 }
 }

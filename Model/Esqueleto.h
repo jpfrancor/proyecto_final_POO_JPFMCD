@@ -17,7 +17,7 @@ public:
     ~Esqueleto() override = default;
 
     // Implementación de la accion específica del Esqueleto.
-    void movimiento1() override;
+    void movimiento1(Entidad& objetivo) override;
 };
 
 #endif //PROYECTO_FINAL_POO_JPFMCD_ESQUELETO_H

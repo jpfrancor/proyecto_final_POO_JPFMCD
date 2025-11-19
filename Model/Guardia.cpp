@@ -29,9 +29,7 @@ Guardia::Guardia(std::string nombre, std::string descripcion, int pv, int atk, i
 
 // ======================= MÉTODOS PÚROS  =========================
 
-void Guardia::movimiento1() {
+void Guardia::movimiento1(Entidad& objetivo) {
     std::cout << this->nombre << " realiza un Ataque con Espada Estándar." << std::endl;
-    // Lógica para atacar
-}
-
+    objetivo.recibirDanio(this->ataque);
 }
