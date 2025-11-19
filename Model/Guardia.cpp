@@ -4,7 +4,6 @@
 
 #include "Guardia.h"
 #include <iostream>
-#include <utility>
 #include "Curativo.h"
 #include "Arma.h"
 
@@ -18,13 +17,12 @@ Guardia::Guardia(std::string nombre, std::string descripcion, int pv, int atk, i
     // 2. Inventario del Guardia
 
     // Items base
-    this->inventario.push_back(new Curativo("Hierbas", 5));
-    this->inventario.push_back(new Curativo("Vendas", 10));
-    this->inventario.push_back(new Curativo("Pocion de Curacion", 25));
+    this->inventario.push_back(new Curativo("Vendas", "Curacion media. +10HP.", 10));
+    this->inventario.push_back(new Curativo("Pocion de Curacion", "Curacion alta, para las mayores batallas. +25HP.", 25));
 
 
-    this->inventario.push_back(new Arma("Espada del Heroe", "Espada formidable disennada para los mayores guerreros.", 15));
-    this->inventario.push_back(new Armadura("Pechera del Heroe", "Pechera formidable disennada para los mayores guerreros.", 10));
+    this->inventario.push_back(new Arma("Espada del Heroe", "Espada formidable disennada para los mayores guerreros. +10ATK.", 15));
+    this->inventario.push_back(new Armadura("Pechera del Heroe", "Pechera formidable disennada para los mayores guerreros. +10DEF.", 10));
 }
 
 // ======================= MÉTODOS PÚROS  =========================

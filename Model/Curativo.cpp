@@ -10,7 +10,7 @@
 
 void Curativo::usar(Entidad* objetivo) {
     // 1. Intentar convertir la referencia de Entidad a Heroe
-    Heroe* heroe = dynamic_cast<Heroe*>(&usuario);//Nos permite usar métodos que solo existen en la clase derivada
+    Heroe* heroe = dynamic_cast<Heroe*>(&objetivo);//Nos permite usar métodos que solo existen en la clase derivada
                                                   //(como curarse() en Heroe)
                                                   //cuando recibes un objeto genérico (como Entidad).
 

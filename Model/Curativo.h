@@ -17,7 +17,7 @@ private:
 public:
     // Constructor
     // El destructor no se coloca por que se hereda de (entidad)
-    Curativo(std::string nombre, int curacion);
+    Curativo(std::string nombre, std::string descripcion, int curacion);
 
 
     void usar(Entidad* objetivo) override;
