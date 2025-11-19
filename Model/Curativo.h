@@ -21,7 +21,7 @@ public:
     Curativo(std::string nombre, int curacion);
 
 
-    void usar(Entidad& usuario) override;
+    void usar(Entidad* objetivo) override;
 };
 
 #endif //PROYECTO_FINAL_POO_JPFMCD_CURATIVO_H

@@ -27,7 +27,7 @@ public:
     // Metodo abstracto (puro virtual) clave del diseño:
     // Define el efecto del ítem. Fuerza a las subclases a implementarlo.
     // Recibe un puntero a Entidad (el Heroe) para modificar sus stats.
-    virtual void funcion(Entidad* objetivo) = 0;
+    virtual void usar(Entidad* objetivo) = 0;
 
     // ======================= GETTERS =========================
 
