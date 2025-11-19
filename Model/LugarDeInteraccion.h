@@ -8,8 +8,10 @@
 
 #include <string>
 #include <iostream>
+#include "Heroe.h"
 
-class Heroe; // Declaración adelantada, ya que la interacción modificará al Heroe
+
+
 
 class LugarDeInteraccion {
 protected:

@@ -7,14 +7,13 @@
 #include <algorithm> // Para std::min/std::max
 
 // ======================= CONSTRUCTOR =========================
-
-// Llama al constructor de la clase base (Entidad) y luego inicializa los atributos propios.
 Heroe::Heroe(std::string nombre, std::string descripcion, int pv, int atk, int def)
     : Entidad(std::move(nombre), std::move(descripcion), pv, atk, def),
-      // 2. Inicialización de atributos propios (Heroe comienza en Nivel 1, EXP 0)
       nivel(1),
       experiencia(0)
 {
+    // Inicializamos puntosDeVidaMax igual a la vida inicial si no se hizo en Entidad
+    // this->puntosDeVidaMax = pv;
     std::cout << "¡El Caballero " << this->nombre << " ha comenzado su aventura!" << std::endl;
 }
 
@@ -22,7 +21,6 @@ Heroe::Heroe(std::string nombre, std::string descripcion, int pv, int atk, int d
 
 void Heroe::ganarExperiencia(int expObtenida) {
     if (nivel >= maxNivel) {
-        // No se gana más experiencia si se alcanzó el nivel máximo.
         std::cout << this->nombre << " ha alcanzado el nivel máximo (" << maxNivel << ")." << std::endl;
         return;
     }
@@ -30,7 +28,8 @@ void Heroe::ganarExperiencia(int expObtenida) {
     this->experiencia += expObtenida;
     std::cout << this->nombre << " ganó " << expObtenida << " EXP." << std::endl;
 
-    while (this->experiencia >= expToLevelUp && nivel < maxNivelL) {
+    // Corregido: 'expToLevelUp' cambiado a 'xpLevelUp' y 'maxNivelL' a 'maxNivel'
+    while (this->experiencia >= xpLevelUp && nivel < maxNivel) {
         subirDeNivel();
     }
 }
@@ -38,41 +37,53 @@ void Heroe::ganarExperiencia(int expObtenida) {
 void Heroe::subirDeNivel() {
     // 1. Aumentar nivel y resetear experiencia
     this->nivel++;
-    this->experiencia -= expToLevelUp;
+    this->experiencia -= xpLevelUp; // Corregido nombre variable
 
     // 2. Mejorar stats
-    this->puntosDeVida += 20; // Atributos protected de Entidad son accesibles
+    this->puntosDeVidaMax += 20;    // Aumentamos el TOPE de vida
+    this->puntosDeVida = this->puntosDeVidaMax; // Restauramos la vida al máximo al subir nivel
     this->ataque += 5;
     this->defensa += 3;
 
     std::cout << "¡" << this->nombre << " subió al Nivel " << this->nivel << "!" << std::endl;
-    std::cout << "Stats mejorados: HP +" << 20 << ", ATK +" << 5 << ", DEF +" << 3 << "." << std::endl;
+    std::cout << "Stats mejorados: HP Max +" << 20 << ", ATK +" << 5 << ", DEF +" << 3 << "." << std::endl;
 }
 
-// ======================= MÉTODOS PÚROS =========================
+// ======================= MÉTODOS PUROS =========================
 
 void Heroe::movimiento1(Entidad& objetivo) {
-    std::cout << this->nombre << " realiza un Ataque Básico." << std::endl;
+    std::cout << this->nombre << " realiza un Ataque Básico a " << objetivo.getNombre() << "." << std::endl;
+    // Aquí deberías llamar a: objetivo.recibirDanio(this->ataque); cuando lo implementes
+}
 
+// ======================= LÓGICA DE CURACION =========================
+
+void Heroe::curarse(int cantidad) {
+    int vidaAntes = this->puntosDeVida;
+
+    this->puntosDeVida += cantidad;
+
+
+    if (this->puntosDeVida > this->puntosDeVidaMax) {
+        this->puntosDeVida = this->puntosDeVidaMax;
+    }
+
+    int recuperado = this->puntosDeVida - vidaAntes;
+
+    std::cout << ">>> " << this->nombre << " recuperó " << recuperado << " HP.";
+    std::cout << " (Vida actual: " << this->puntosDeVida << "/" << this->puntosDeVidaMax << ")" << std::endl;
 }
 
 // ======================= SOBRESCRITURA DE MORIR =========================
 
-// El Heroe sobrescribe el metodo morir para la lógica de Game Over.
 void Heroe::morir(Entidad& atacante) {
     std::cout << "\n==========================================" << std::endl;
     std::cout << this->nombre << " ha sido derrotado por " << atacante.getNombre() << "." << std::endl;
     std::cout << "G A M E   O V E R" << std::endl;
     std::cout << "==========================================" << std::endl;
-    // Lógica para salir del juego o volver al menú principal
 }
 
 // ======================= GETTERS =========================
 
-int Heroe::getNivel() const {
-    return nivel;
-}
-
-int Heroe::getExperiencia() const {
-    return experiencia;
-}
+int Heroe::getNivel() const { return nivel; }
+int Heroe::getExperiencia() const { return experiencia; }

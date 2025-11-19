@@ -9,36 +9,36 @@
 
 class Heroe : public Entidad {
 private:
-
     int nivel;
     int experiencia;
-    const int xpLevelUp = 100; // la lógica de subida de nivel
-    const int maxNivel = 3;         // Nivel máximo según el guion
 
-    // Métodos de utilidad
-    void subirDeNivel(); // Implementación del metodo que mejora los stats
+
+    const int xpLevelUp = 100;
+    const int maxNivel = 3;
+
+    // Metodos de utilidad
+    void subirDeNivel();
 
 public:
-    // Constructor. Inicializa atributos propios y llama al constructor de la clase base.
+    // Constructor
     Heroe(std::string nombre, std::string descripcion, int pv, int atk, int def);
 
     // --- Métodos puros virtuales ---
-    // Implementación de la accion del héroe que el usuario puede elegir.
     void movimiento1(Entidad& objetivo) override;
 
     // --- Sobrescritura de Comportamiento ---
-
-    // El metodo morir es sobrescrito para la lógica de "Game Over", no para el despojo.
-    // Usamos 'Entidad&' para mayor abstracción, aunque aquí solo necesitamos el 'override'.
     void morir(Entidad& atacante) override;
 
-    // Metodo para ganar experiencia (llamado al derrotar un enemigo)
+    // Metodo para ganar experiencia
     void ganarExperiencia(int expObtenida);
+
+    // Metodo para logica de Curativo ---
+    void curarse(int cantidad);
 
     // --- GETTERS ---
     int getNivel() const;
     int getExperiencia() const;
 };
 
-
+#endif // PROYECTO_FINAL_POO_JPFMCD_HEROE_H
 #endif //PROYECTO_FINAL_POO_JPFMCD_HEROE_H
