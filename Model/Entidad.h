@@ -31,9 +31,6 @@ public:
 
     //Ataques, serán modificados para cada clase heredada. Como Pokémon.
     virtual void movimiento1() = 0;
-    virtual void movimiento2() = 0;
-    virtual void movimiento3() = 0;
-    virtual void movimiento4() = 0;
 
     //Se crea virtual ya que el héroe muere de forma distinta a los enemigos (los cuales botan objetos)
     virtual void morir(Heroe* heroe);
