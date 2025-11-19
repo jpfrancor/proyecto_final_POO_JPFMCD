@@ -12,4 +12,6 @@ add_executable(proyectoFinalPOO main.cpp
         Model/Heroe.h
         Model/Habitacion.cpp
         Model/Habitacion.h
+        Model/Jefe.cpp
+        Model/Jefe.h
 )

@@ -20,19 +20,19 @@ Habitacion::Habitacion(std::string nombre, std::string descripcion, int nivel)
 
 // Debe liberar la memoria de los punteros que "posee" (enemigos e interacciones).
 Habitacion::~Habitacion() {
-    for (Entidad* enemigo : enemigos) { // Liberar la memoria de los enemigos para evitar memory leak
+    // 1. Liberar la memoria de los enemigos
+    for (Entidad* enemigo : enemigos) {
         delete enemigo;
     }
     enemigos.clear();
 
-    for (LugarDeInteraccion* lugar : interacciones) { //Liberar la memoria de los LugaresDeInteraccion para evitar memory leak
+    // 2. Liberar la memoria de los LugaresDeInteraccion
+    for (LugarDeInteraccion* lugar : interacciones) {
         delete lugar;
     }
     interacciones.clear();
 
-    // NOTA: Los punteros a otras Habitaciones (salidas) NO se liberan aquí,
-    // ya que el Control del Juego será el único responsable de liberar la
-    // memoria de todas las Habitaciones para evitar dobles 'delete'.
+    // NOTA: Los punteros a otras Habitaciones (salidas) NO se liberan aquí.
 }
 
 // ======================= MÉTODOS DE GESTIÓN DE JUEGO =========================
@@ -77,13 +77,18 @@ bool Habitacion::estaDespejada() const {
 }
 
 bool Habitacion::interactuarCon(const std::string& nombreLugar, Heroe& heroe) {
-    // 1. Busca el LugarDeInteraccion por nombre
+
+    // Busca el lugar usando un bucle simple (ya no necesitamos manejar el borrado)
     for (LugarDeInteraccion* lugar : interacciones) {
+
         if (lugar->getNombre() == nombreLugar) {
 
-            // 2. Ejecuta la interacción
+            // Se encontró el lugar. Ejecuta la interacción.
+            // La lógica para no dar loot si 'isUsado' es true DEBE estar dentro de este metodo
             lugar->ejecutarInteraccion(heroe);
-            return true; // Interacción exitosa
+
+            // El puntero permanece en el vector 'interacciones'.
+            return true; // Interacción encontrada y ejecutada
         }
     }
     return false; // Lugar no encontrado
