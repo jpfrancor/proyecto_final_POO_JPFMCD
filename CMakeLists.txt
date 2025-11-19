@@ -6,12 +6,10 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(proyectoFinalPOO main.cpp
         Model/Entidad.cpp
         Model/Entidad.h
-        Model/Entidad.h
-        Model/Entidad.cpp
         Model/Item.cpp
         Model/Item.h
-        Model/Entidad.h
-        Model/Entidad.h
         Model/Heroe.cpp
         Model/Heroe.h
+        Model/Habitacion.cpp
+        Model/Habitacion.h
 )
