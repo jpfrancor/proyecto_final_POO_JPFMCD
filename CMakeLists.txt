@@ -20,4 +20,6 @@ add_executable(proyectoFinalPOO main.cpp
         Model/Esqueleto.h
         Model/LugarDeInteraccion.cpp
         Model/LugarDeInteraccion.h
+        Model/Arma.cpp
+        Model/Arma.h
 )

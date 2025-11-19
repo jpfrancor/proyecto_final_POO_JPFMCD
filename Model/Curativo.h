@@ -7,9 +7,8 @@
 
 #include "Item.h"
 #include <iostream>
-
-class Entidad;
-class Heroe;
+#include "Entidad.h"
+#include "Heroe.h"
 
 class Curativo : public Item {
 private:

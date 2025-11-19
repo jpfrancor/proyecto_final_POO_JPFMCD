@@ -7,7 +7,6 @@
 
 #include <string>
 #include <iostream>
-
 #include "Entidad.h"
 
 class Item {

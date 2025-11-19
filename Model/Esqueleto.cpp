@@ -22,8 +22,8 @@ Esqueleto::Esqueleto(std::string nombre, std::string descripcion, int pv, int at
     this->inventario.push_back(new Curativo("Vendas", 10));
 
 
-    this->inventario.push_back(new Arma("Daga Oxidada", 5));
-    this->inventario.push_back(new Armadura("Casco Roto", 2));
+    this->inventario.push_back(new Arma("Lanza", "Una lanza de caballeria, ideal para atravesar enemigos que se acercan demasiado.", 5));
+    this->inventario.push_back(new Armadura("Pechera", "Ofrece mas resistencia, enhorabuena.", 2));
 }
 
 // ======================= MÉTODOS PÚROS =========================

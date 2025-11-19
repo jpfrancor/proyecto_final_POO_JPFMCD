@@ -42,6 +42,8 @@ public:
 
     void recibirDanio(int cantidad);
 
+    void modificarEstadisticas(int vida, int ataqueExtra, int defensaExtra);
+
 
 // ======================= GETTERS =========================
 

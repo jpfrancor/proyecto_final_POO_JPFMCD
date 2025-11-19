@@ -55,6 +55,14 @@ void Entidad::recibirDanio(int cantidad) {
     std::cout << "Vida restante de " << this->nombre << ": " << this->puntosDeVida << std::endl;
 }
 
+void Entidad::modificarEstadisticas(int vida, int ataqueExtra, int defensaExtra) {
+    this->puntosDeVida += vida;
+    if(this->puntosDeVida > this->puntosDeVidaMax) this->puntosDeVida = this->puntosDeVidaMax;
+
+    this->ataque += ataqueExtra;
+    this->defensa += defensaExtra;
+}
+
 // ======================= GETTERS =========================
 
 std::string Entidad::getNombre() const {
