@@ -7,8 +7,9 @@
 
 #include "Entidad.h" // Hereda de la clase base
 #include <string>
+#include "Heroe.h"
 
-class Heroe; // Declaración adelantada para usar Heroe& en los métodos
+
 
 class Jefe : public Entidad {
 public:

@@ -14,6 +14,7 @@ Entidad::Entidad(std::string nombre, std::string descripcion, int hp, int atk, i
     : nombre(nombre),
       descripcion(descripcion),
       puntosDeVida(hp),
+      puntosDeVidaMax(hp),
       ataque(atk),
       defensa(def) {
     std::cout << "Enhorabuena! " << this->nombre << " ha aparecido." << std::endl;
@@ -74,4 +75,7 @@ int Entidad::getAtaque() const {
 
 int Entidad::getDefensa() const {
     return defensa;
+}
+int Entidad::getPuntosDeVidaMax() const
+{ return puntosDeVidaMax;
 }

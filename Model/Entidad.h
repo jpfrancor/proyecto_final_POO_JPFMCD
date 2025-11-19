@@ -16,6 +16,8 @@ protected: //Van con protectec para que sólo los hijos puedan acceder a estos a
     //Atributos privados
     std::string nombre;
     std::string descripcion;
+
+    int puntosDeVidaMax;
     int puntosDeVida;
     int ataque;
     int defensa;
@@ -45,9 +47,10 @@ public:
 
     std::string getNombre() const; // Se agrega const para que lo traiga sin modificarlo
     std::string getDescripcion() const;
-    int getPuntosDeVida() const; // Se agrega const para que lo traiga sin modificarlo
-    int getAtaque() const; // Se agrega const para que lo traiga sin modificarlo
-    int getDefensa() const; // Se agrega const para que lo traiga sin modificarlo
+    int getPuntosDeVida() const;
+    int getAtaque() const;
+    int getDefensa() const;
+    int getPuntosDeVidaMax() const;
 };
 
 #endif //PROYECTOFINALPOO_ENTIDAD_H
