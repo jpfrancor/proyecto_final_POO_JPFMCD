@@ -10,7 +10,7 @@
 #include <vector>
 #include <map> // Necesario para std::map
 #include "Entidad.h" // Para los enemigos de la habitación
-//#include "LugarDeInteraccion.h" // Para los "sitios buscables" ======= IMPORTANTE ==========
+#include "LugarDeInteraccion.h" // Para los "sitios buscables" ======= IMPORTANTE ==========
 
 class Habitacion {
 private:
