@@ -6,13 +6,12 @@
 #include "Heroe.h" // Incluimos Heroe para poder usar Heroe&
 #include <iostream>
 #include <cstdlib> // Necesario para rand()
-#include <utility> // Para std::move
 
 // ======================= CONSTRUCTOR =========================
 
 Jefe::Jefe(std::string nombre, std::string descripcion, int hp, int atk, int def)
     // Llama al constructor de la clase base, inicializando los atributos
-    : Entidad(std::move(nombre), std::move(descripcion), hp, atk, def)
+    : Entidad(nombre), (descripcion), hp, atk, def)
 {
     std::cout << "El Jefe Final " << this->nombre << " ha sido invocado." << std::endl;
 }
@@ -25,11 +24,11 @@ void Jefe::movimiento1(Heroe& objetivo) {
 
     switch (ataqueElegido) {
         case 0:
-            std::cout << this->nombre << " usa [Ataque Básico] contra " << objetivo.getNombre() << "!" << std::endl;
-            // Lógica de daño: objetivo.recibirDanio(...)
+            std::cout << this->nombre << " usa [Ataque Basico] contra " << objetivo.getNombre() << "!" << std::endl;
+            objetivo.recibirDanio(this->ataque);
             break;
         case 1:
-            std::cout << this->nombre << " usa [Prisión de Sombras], reduciendo la defensa de " << objetivo.getNombre() << "." << std::endl;
+            std::cout << this->nombre << " usa [Prision de Sombras], reduciendo la defensa de " << objetivo.getNombre() << "." << std::endl;
             // Lógica del Ataque 2: Aplicar efecto o daño
             break;
         case 2:
