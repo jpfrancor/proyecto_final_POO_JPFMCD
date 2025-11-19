@@ -38,6 +38,13 @@ void Entidad::agregarItemInventario(Item* item) {
     std::cout << "Se agregó " << item->getNombre() << " al inventario de " << this->nombre << "." << std::endl;
 }
 
+//metodo para recibir danio
+void Entidad::recibirDanio(int danio) {
+   int danioReal = danio - this->defensa;
+   if (danioReal < 0) danioReal = 0; // Evitar curar si la defensa es muy alta
+   this->puntosDeVida -= danioReal;
+   }
+
 // ======================= GETTERS =========================
 
 std::string Entidad::getNombre() const {

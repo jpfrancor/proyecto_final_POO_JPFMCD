@@ -38,6 +38,9 @@ public:
     //Metodo para añadir objetos al inventario de la entidad
     void agregarItemInventario(Item* item);
 
+    void recibirDanio(int cantidad);
+
+
 // ======================= GETTERS =========================
 
     std::string getNombre() const; // Se agrega const para que lo traiga sin modificarlo
