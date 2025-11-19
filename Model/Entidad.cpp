@@ -38,12 +38,21 @@ void Entidad::agregarItemInventario(Item* item) {
     std::cout << "Se agregó " << item->getNombre() << " al inventario de " << this->nombre << "." << std::endl;
 }
 
-//metodo para recibir danio
-void Entidad::recibirDanio(int danio) {
-   int danioReal = danio - this->defensa;
-   if (danioReal < 0) danioReal = 0; // Evitar curar si la defensa es muy alta
-   this->puntosDeVida -= danioReal;
-   }
+void Entidad::recibirDanio(int cantidad) {
+    // 1. Calculamos el daño real restando la defensa
+    int danioReal = cantidad - this->defensa;
+    if (danioReal < 0) {
+        danioReal = 0;
+    }
+    this->puntosDeVida -= danioReal;
+
+    if (this->puntosDeVida < 0) {
+        this->puntosDeVida = 0;
+    }
+    std::cout << this->nombre << " recibio " << danioReal
+              << " puntos de danio (Defensa bloqueo: " << this->defensa << ")." << std::endl;
+    std::cout << "Vida restante de " << this->nombre << ": " << this->puntosDeVida << std::endl;
+}
 
 // ======================= GETTERS =========================
 
