@@ -16,16 +16,14 @@ private:
 
 public:
     // Constructor
-    Armadura(std::string nombre, int defensaExtra);
+    Armadura(std::string nombre, std::string descripcion, int defensaExtra);
 
-    // Sobrescritura del método usar (definido en Item.h)
+    // Sobrescritura del metodo usar (definido en Item.h)
     void usar(Entidad* objetivo) override;
 
     // Getter
     int getDefensaAdicional() const;
 };
-
-
 
 
 #endif //PROYECTO_FINAL_POO_JPFMCD_ARMADURA_H

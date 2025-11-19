@@ -9,7 +9,7 @@
 // Constructor
 
 Armadura::Armadura(std::string nombre, int defensaExtra)
-    : Item(nombre, "Una pieza de equipo que protege del daño.", true),
+    : Item(nombre, descripcion, true),
       defensaAdicional(defensaExtra)
 {
 }
