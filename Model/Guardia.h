@@ -18,7 +18,7 @@ public:
 
     // --- Métodos puros virtuales---
     // Implementación de la accion específica del Guardia.
-    void movimiento1() override;
+    void movimiento1(Heroe& objetivo) override;
 
 
     // NOTA: No necesitamos sobrescribir morir(), usará la lógica de despojo de Entidad.

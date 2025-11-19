@@ -18,4 +18,6 @@ add_executable(proyectoFinalPOO main.cpp
         Model/Guardia.h
         Model/Esqueleto.cpp
         Model/Esqueleto.h
+        Model/LugarDeInteraccion.cpp
+        Model/LugarDeInteraccion.h
 )
