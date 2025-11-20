@@ -130,10 +130,6 @@ void Controlador::iniciar() {
 void Controlador::procesarCombate() {
     vista.mostrarMensaje("\n!!! COMBATE INICIADO !!!");
 
-    // Simplificación: Peleamos contra el primer enemigo de la lista
-    // Nota: Necesitas acceso a los enemigos. Habitacion tiene getEnemigos().
-    // Asumimos que getEnemigos devuelve una referencia al vector.
-
     // Obtenemos el primer enemigo vivo
     std::vector<Entidad*> enemigos = habitacionActual->getEnemigos();
     if (enemigos.empty()) return;
@@ -197,6 +193,16 @@ void Controlador::procesarCombate() {
         vista.mostrarMensaje("¡Has derrotado a " + enemigo->getNombre() + "!");
         enemigo->morir(*heroe); // Loot
         habitacionActual->removerEnemigo(enemigo);
+        //Con dynamic_cast se revisa si el enemigo es jefe
+        if (dynamic_cast<Jefe*>(enemigo) != nullptr) {
+            vista.mostrarMensaje("\n**************************************************");
+            vista.mostrarMensaje("   ¡VICTORIA! HAS LIBERADO EL CALABOZO DE ERELIS   ");
+            vista.mostrarMensaje("          Tu hija Carlotta corre a abrazarte.      ");
+            vista.mostrarMensaje("**************************************************");
+
+            juegoTerminado = true; // Esto rompe el bucle while principal
+            return; // Salimos del combate
+        }
 
         // Héroe gana experiencia (Faltaba implementar getters de experiencia en enemigo, inventamos valor)
         heroe->ganarExperiencia(50);
@@ -396,10 +402,6 @@ void Controlador::procesarInventario() {
         if (!nombreHabitacion.empty() && nombreHabitacion.back() == '\r') {
             nombreHabitacion.pop_back();
         }
-        std::cout << "DEBUG - Defensa leida: " << def << std::endl;
-        std::cout << "DEBUG - Habitacion leida: [" << nombreHabitacion << "]" << std::endl;
-
-
 
         // Reconstruir Héroe
         if (heroe != nullptr) delete heroe;
