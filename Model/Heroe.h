@@ -27,7 +27,7 @@ public:
     void movimiento1(Entidad& objetivo) override;
 
     // --- Sobrescritura de Comportamiento ---
-    void morir(Entidad& atacante) override;
+    void morir(Entidad& atacante);
 
     // Metodo para ganar experiencia
     void ganarExperiencia(int expObtenida);
