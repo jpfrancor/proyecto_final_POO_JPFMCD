@@ -71,19 +71,20 @@ void Controlador::iniciar() {
         cargarPartida();
         // Si la carga falló (no había archivo), creamos un héroe por defecto
         if (heroe == nullptr) {
-            std::string nombre = vista.pedirString();
-            heroe = new Heroe(nombre, "Aventurero", 100, 10, 5);
+            std::string nombre;
+            std::getline(std::cin, nombre);
+            heroe = new Heroe(nombre, "Un valiente aventurero, en busca de su hija perdida en la oscuridad.", 100, 10, 1);
         }
     } else {
         // Nueva Partida normal
-        std::string nombre = vista.pedirString();
-        heroe = new Heroe(nombre, "Aventurero", 100, 10, 5);
+        std::string nombre;
+        std::getline(std::cin, nombre);
+        heroe = new Heroe(nombre, "Un valiente aventurero, en busca de su hija perdida en la oscuridad.", 100, 10, 1);
     }
     std::string nombre = vista.pedirString();
 
 
     // Crear Héroe (Nombre, Desc, HP, Atk, Def)
-    heroe = new Heroe(nombre, "Un valiente aventurero, en busca de su hija perdida en la oscuridad.", 100, 10, 1);
 
     inicializarMapa();
 
@@ -305,8 +306,9 @@ void Controlador::procesarInventario() {
     std::ofstream archivo("savegame.txt");
 
     if (archivo.is_open()) {
-        // 1. Datos del Héroe (Igual que antes)
+        // Datos del Héroe
         archivo << heroe->getNombre() << std::endl;
+        archivo << heroe->getDescripcion() << std::endl;
         archivo << heroe->getNivel() << std::endl;
         archivo << heroe->getExperiencia() << std::endl;
         archivo << heroe->getPuntosDeVida() << std::endl;
@@ -314,10 +316,10 @@ void Controlador::procesarInventario() {
         archivo << heroe->getAtaque() << std::endl;
         archivo << heroe->getDefensa() << std::endl;
 
-        // 2. Ubicación
+        // Ubicación
         archivo << habitacionActual->getNombre() << std::endl;
 
-        // === 3. NUEVO: GUARDAR INVENTARIO ===
+        // Guardado de inventario
         // Escribimos cuántos items tenemos para saber cuántos leer luego
         archivo << heroe->getInventario().size() << std::endl;
 
@@ -347,7 +349,7 @@ void Controlador::procesarInventario() {
         }
 
         archivo.close();
-        vista.mostrarMensaje(">>> Partida y Equipo guardados. <<<");
+        vista.mostrarMensaje(">>> Progreso guardado exitosamente. <<<");
     } else {
         vista.mostrarMensaje("Error al guardar.");
     }
@@ -357,14 +359,17 @@ void Controlador::procesarInventario() {
     std::ifstream archivo("savegame.txt");
 
     if (archivo.is_open()) {
-        std::string nombre, nombreHabitacion;
+        std::string nombreGuardado;
+        std::string descripcionGuardada;
+        std::string nombreHabitacion;
         int nivel, exp, hp, hpMax, atk, def;
 
         // LEEMOS EN EL MISMO ORDEN QUE GUARDAMOS
         // Nota: getline es mejor para textos con espacios, pero '>>' funciona para palabras simples.
 
         // Lectura segura para evitar errores de buffer:
-        std::getline(archivo, nombre); // Nombre Héroe
+        std::getline(archivo, nombreGuardado); // Nombre Héroe
+        std::getline(archivo, descripcionGuardada);
         archivo >> nivel;
         archivo >> exp;
         archivo >> hp;
@@ -381,7 +386,7 @@ void Controlador::procesarInventario() {
         if (heroe != nullptr) delete heroe;
 
         // Creamos uno nuevo con los stats cargados
-        heroe = new Heroe(nombre, "Heroe Cargado", hpMax, atk, def);
+        heroe = new Heroe(nombreGuardado, descripcionGuardada, hpMax, atk, def);
         heroe->setNivel(nivel);
         heroe->setExperiencia(exp);
         heroe->setPuntosDeVida(hp); // Restauramos la vida actual (puede estar herido)
@@ -440,13 +445,8 @@ void Controlador::procesarInventario() {
         }
 
         archivo.close();
-        vista.mostrarMensaje(">>> Partida cargada correctamente. ¡Bienvenido de nuevo, " + nombre + "! <<<");
+        vista.mostrarMensaje(">>> Partida cargada correctamente. ¡Bienvenido de nuevo, " + nombreGuardado + "! <<<");
     } else {
         vista.mostrarMensaje("No existe ningun archivo de guardado anterior.");
     }
 }
-
-
-
-
-

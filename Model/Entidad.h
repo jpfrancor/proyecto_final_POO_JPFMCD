@@ -62,6 +62,8 @@ public:
     void setPuntosDeVidaMax(int valor) { puntosDeVidaMax = valor; }
     void setAtaque(int valor) { ataque = valor; }
     void setDefensa(int valor) { defensa = valor; }
+    void setNombre(std::string n) { this->nombre = n; }
+    void setDescripcion(std::string d) { this->descripcion = d; }
 };
 
 #endif //PROYECTOFINALPOO_ENTIDAD_H
