@@ -6,6 +6,7 @@
 #include <iostream>
 #include "Curativo.h"
 #include "Arma.h"
+#include "Armadura.h"
 
 // ======================= CONSTRUCTOR =========================
 
