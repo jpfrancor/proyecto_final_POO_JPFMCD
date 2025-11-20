@@ -181,31 +181,6 @@ void Controlador::procesarInteraccion() {
     }
 }
 
-
-
-
-    // Validar rango para no coger objetos por fuera
-    if (opcion > 0 && opcion <= mochila.size()) {
-        // Ajustamos indice (Usuario pone 1 pero el Vector empieza en 0)
-        int indice = opcion - 1;
-        Item* itemElegido = mochila[indice];
-
-        // Usar esta hecho para manejar la funcion de cualquiera de los 3 objetos, POLIMORFISMO
-        itemElegido->usar(heroe);
-
-        // === LÓGICA DE CONSUMIBLES ===
-        // Si cura, no se debe usar infinitamente, entonces lo borramos. Armas y armaduras se quedan indefinidamente
-        if (itemElegido->getEsConsumible()) {
-            // Lo sacamos del vector del héroe
-            heroe->eliminarItem(indice);
-            // Lo borramos de la memoria para evitar memory leak
-            delete itemElegido;
-        }
-    } else {
-        vista.mostrarMensaje("Opcion invalida.");
-    }
-}
-
 void Controlador::procesarInventario() {
     // Obtener el inventario
     const std::vector<Item*>& mochila = heroe->getInventario();
@@ -245,7 +220,9 @@ void Controlador::procesarInventario() {
         itemElegido->usar(heroe);
 
         if (itemElegido->getEsConsumible()) {
+            // Lo sacamos del vector del héroe
             heroe->eliminarItem(indice);
+            // Lo borramos de la memoria para evitar memory leak
             delete itemElegido;
         }
     } else {

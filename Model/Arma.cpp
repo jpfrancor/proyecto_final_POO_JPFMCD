@@ -17,16 +17,9 @@ Arma::Arma(std::string nombre, std::string descripcion, int danio)
     else if (danio >= 15) this->probabilidadDrop = 10; // Para espada del heroe
 }
 void Arma::usar(Entidad* usuario) {
-    // Intentamos convertir al usuario en Héroe
     Heroe* heroe = dynamic_cast<Heroe*>(usuario);
-
     if (heroe) {
-        // Mensaje narrativo
-        std::cout << heroe->getNombre() << " se ha equipado " << this->nombre << "." << std::endl;
-        heroe->modificarEstadisticas(0, this->puntosDeAtaque, 0);
-
-        std::cout << "El ataque ha subido en " << this->puntosDeAtaque << " puntos!" << std::endl;
-    } else {
-        std::cout << "Solo el heroe puede equipar armas." << std::endl;
+        // Delegamos la lógica al Héroe, que ahora es inteligente
+        heroe->equiparArma(this);
     }
 }

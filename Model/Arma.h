@@ -21,6 +21,9 @@ public:
 
     // Sobrescribimos el metodo usar (asegúrate de haber cambiado 'funcion' por 'usar' en Item.h)
     void usar(Entidad* objetivo) override;
+
+    //Getter
+    int getPuntosAtaque() const { return puntosDeAtaque; }
 };
 
 #endif //PROYECTOFINALPOO_ARMA_H

@@ -7,6 +7,9 @@
 #include "Entidad.h"
 #include <string>
 
+class Arma;
+class Armadura;
+
 class Heroe : public Entidad {
 private:
     int nivel;
@@ -15,6 +18,9 @@ private:
 
     const int xpLevelUp = 100;
     const int maxNivel = 3;
+
+    Arma* armaEquipada = nullptr;
+    Armadura* armaduraEquipada = nullptr;
 
     // Metodos de utilidad
     void subirDeNivel();
@@ -34,6 +40,9 @@ public:
 
     // Metodo para logica de Curativo ---
     void curarse(int cantidad);
+
+    void equiparArma(Arma* arma);
+    void equiparArmadura(Armadura* armadura);
 
     // --- GETTERS ---
     int getNivel() const;

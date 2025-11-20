@@ -19,7 +19,6 @@ Armadura::Armadura(std::string nombre, std::string descripcion, int defensa)
 void Armadura::usar(Entidad* usuario) {
     Heroe* heroe = dynamic_cast<Heroe*>(usuario);
     if (heroe) {
-        std::cout << heroe->getNombre() << " se equipo " << this->nombre << std::endl;
-        heroe->modificarEstadisticas(0, 0, this->defensaExtra);
+        heroe->equiparArmadura(this);
     }
 }

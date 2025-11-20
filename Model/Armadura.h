@@ -16,6 +16,8 @@ public:
     Armadura(std::string nombre, std::string descripcion, int defensa);
 
     void usar(Entidad* usuario) override;
+
+    int getDefensaExtra() const { return defensaExtra; }
 };
 
 #endif
