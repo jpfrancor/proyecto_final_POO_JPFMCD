@@ -9,7 +9,6 @@
 #include "Heroe.h"
 #include "Habitacion.h"
 #include "Vista.h"
-// Incluye tus enemigos y objetos
 #include "Guardia.h"
 #include "Esqueleto.h"
 #include "Jefe.h"
@@ -17,6 +16,8 @@
 #include "Armadura.h"
 #include "Curativo.h"
 #include "LugarDeInteraccion.h"
+#include <fstream> //  para persistencia
+#include <vector>
 
 class Controlador {
 private:
@@ -25,6 +26,8 @@ private:
     Habitacion* habitacionAnterior;
     Vista vista;
     bool juegoTerminado;
+    std::vector<Habitacion*> mapaGlobal; // vector para guarda el mapa global para persistencia
+
 
     // Métodos internos
     void inicializarMapa();
@@ -32,7 +35,8 @@ private:
     void procesarMovimiento();
     void procesarInteraccion();
     void procesarInventario();
-    void guardarPartida(); // Implementación básica
+    void guardarPartida();
+    void cargarPartida();
 
 public:
     Controlador();
