@@ -3,33 +3,19 @@
 //
 
 #include "Armadura.h"
-#include "Entidad.h"
+#include "Heroe.h"
 #include <iostream>
 
-// Constructor
-
-Armadura::Armadura(std::string nombre, int defensaExtra)
-    : Item(nombre, descripcion, true),
-      defensaAdicional(defensaExtra)
-{
+// El constructor debe coincidir
+Armadura::Armadura(std::string nombre, std::string descripcion, int defensa)
+    : Item(nombre, descripcion, false) { // Pasamos la descripcion al padre
+    this->defensaExtra = defensa;
 }
 
-void Armadura::usar(Entidad* objetivo) {
-    if (objetivo != nullptr) {
-
-        std::cout << objetivo->getNombre() << " se ha equipado " << this->getNombre() << "." << std::endl;
-
-        // === LÓGICA PRINCIPAL ===
-
-
-        objetivo->modificarEstadisticas(0, 0, this->defensaAdicional);
-
-
-        std::cout << "Defensa aumentada en +" << this->defensaAdicional
-                  << ". (Defensa Total: " << objetivo->getDefensa() << ")" << std::endl;
+void Armadura::usar(Entidad* usuario) {
+    Heroe* heroe = dynamic_cast<Heroe*>(usuario);
+    if (heroe) {
+        std::cout << heroe->getNombre() << " se equipo " << this->nombre << std::endl;
+        heroe->modificarEstadisticas(0, 0, this->defensaExtra);
     }
-}
-
-int Armadura::getDefensaAdicional() const {
-    return defensaAdicional;
 }

@@ -2,28 +2,20 @@
 // Created by marti on 19/11/2025.
 //
 
-#ifndef PROYECTO_FINAL_POO_JPFMCD_ARMADURA_H
-#define PROYECTO_FINAL_POO_JPFMCD_ARMADURA_H
+#ifndef ARMADURA_H
+#define ARMADURA_H
 
 #include "Item.h"
-#include <string>
-#include "entidad.h"
-
 
 class Armadura : public Item {
 private:
-    int defensaAdicional; // La cantidad de defensa que suma
+    int defensaExtra;
 
 public:
-    // Constructor
-    Armadura(std::string nombre, std::string descripcion, int defensaExtra);
+    // Asegúrate que pida 3 cosas:
+    Armadura(std::string nombre, std::string descripcion, int defensa);
 
-    // Sobrescritura del metodo usar (definido en Item.h)
-    void usar(Entidad* objetivo) override;
-
-    // Getter
-    int getDefensaAdicional() const;
+    void usar(Entidad* usuario) override;
 };
 
-
-#endif //PROYECTO_FINAL_POO_JPFMCD_ARMADURA_H
+#endif
