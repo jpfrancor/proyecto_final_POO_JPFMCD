@@ -45,10 +45,10 @@ void Controlador::inicializarMapa() {
     armeria->agregarInteraccion(new LugarDeInteraccion("Fuente Sagrada", "Agua brillante", nullptr, 50));
 
     // Arma en la armería (Cofre)
-    Item* espada = new Arma("Espada del Heroe","Espada formidable disennada para los mayores guerreros. +15ATK.",  25);
+    Item* espada = new Arma("Espada del Heroe","Espada formidable disennada para los mayores guerreros. +15ATK.",  15);
     armeria->agregarInteraccion(new LugarDeInteraccion("Expositor de Armas", "Vitrina rota", espada, 0));
 
-    // 5. Definir inicio
+    // Definir inicio
     this->habitacionActual = entrada;
 }
 
@@ -109,6 +109,7 @@ void Controlador::procesarCombate() {
     Entidad* enemigo = enemigos[0];
 
     while (enemigo->getPuntosDeVida() > 0 && heroe->getPuntosDeVida() > 0) {
+        vista.mostrarHUD(heroe);
         vista.mostrarMensaje("\nVS.: " + enemigo->getNombre() + " (HP: " + std::to_string(enemigo->getPuntosDeVida()) + ")");
         vista.mostrarMenuCombate();
         int op = vista.pedirOpcion();
@@ -135,10 +136,11 @@ void Controlador::procesarCombate() {
                     // No hay return para que se pierda turno y recibir daño
                 } else {
                     // EXITO DE ESCAPE
-                    vista.mostrarMensaje("¡Logras evitar los golpes y sales ileso. Escapaste!");
+                    vista.mostrarMensaje("¡Logras evitar los golpes y sales ileso. Escapaste a " + habitacionAnterior->getNombre());
                     if (habitacionAnterior != nullptr) {
                         habitacionActual = habitacionAnterior;
                     }
+                    vista.mostrarHUD(heroe);
                     return; //El return nos saca de la funcion para que volvamos a la habitacion sin combate.
                 }
             }

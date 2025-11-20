@@ -24,12 +24,12 @@ void Jefe::movimiento1(Entidad& objetivo) {
 
     switch (ataqueElegido) {
         case 0:
-            std::cout << this->nombre << " usa [Ataque Basico] contra " << objetivo.getNombre() << "!" << std::endl;
+            std::cout << this->nombre << " usa [Garra Demoniaca] contra " << objetivo.getNombre() << "!" << std::endl;
             objetivo.recibirDanio(this->ataque);
             break;
         case 1:
             std::cout << this->nombre << " usa [Prision de Sombras], reduciendo la defensa de " << objetivo.getNombre() << "." << std::endl;
-            objetivo.modificarEstadisticas(0, 0, -2);
+            objetivo.modificarEstadisticas(0, 0, -3);
             break;
         case 2:
             std::cout << this->nombre << " desata [Juicio del Calabozo]! Un ataque devastador sobre " << objetivo.getNombre() << "." << std::endl;
