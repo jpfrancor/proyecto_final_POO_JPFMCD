@@ -76,11 +76,31 @@ void Entidad::recibirDanio(int cantidad) {
 }
 
 void Entidad::modificarEstadisticas(int vida, int ataqueExtra, int defensaExtra) {
+    // 1. Modificar Vida
     this->puntosDeVida += vida;
-    if(this->puntosDeVida > this->puntosDeVidaMax) this->puntosDeVida = this->puntosDeVidaMax;
 
+    // Control de vida máxima
+    if (this->puntosDeVida > this->puntosDeVidaMax) {
+        this->puntosDeVida = this->puntosDeVidaMax;
+    }
+
+    if (this->puntosDeVida < 0) {
+        this->puntosDeVida = 0;
+    }
+
+    //Mod ataque
     this->ataque += ataqueExtra;
+    // para que no haya ataque negativo
+    if (this->ataque < 0) {
+        this->ataque = 0;
+    }
+
+    //Mod defensa
     this->defensa += defensaExtra;
+    // para que no haya defensa negativa
+    if (this->defensa < 0) {
+        this->defensa = 0;
+    }
 }
 
 //Con esto sacamos un item del inventario
