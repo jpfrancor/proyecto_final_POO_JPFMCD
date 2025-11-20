@@ -5,18 +5,19 @@
 #ifndef PROYECTOFINALPOO_ENTIDAD_H
 #define PROYECTOFINALPOO_ENTIDAD_H
 
-#include <iostream>
-#include <vector>
 #include <string>
+#include <vector>
+#include <iostream>
 
-#include "Item.h" //Se incluye el item para que el programa sepa que se utiliza
+// Forward Declarations (La solución mágica)
+class Item;
+class Heroe;
 
 class Entidad {
 protected: //Van con protectec para que sólo los hijos puedan acceder a estos atributos
     //Atributos privados
     std::string nombre;
     std::string descripcion;
-
     int puntosDeVidaMax;
     int puntosDeVida;
     int ataque;
@@ -24,6 +25,7 @@ protected: //Van con protectec para que sólo los hijos puedan acceder a estos a
 
     //Atributo inventario, usa un puntero al Item
     std::vector<Item*> inventario;
+
 public:
     //Constructor
     Entidad(std::string nombre, std::string descripcion, int hp, int atk, int def);
@@ -38,16 +40,16 @@ public:
     virtual void morir(Heroe& heroe);
 
     //Metodo para añadir objetos al inventario de la entidad
-    void agregarItemInventario(Item* item);
+    void agregarItemInventario(Item* item); //Esto es un pushback
 
     void recibirDanio(int cantidad);
 
-    void modificarEstadisticas(int vida, int ataqueExtra, int defensaExtra);
+    void setDefensa(int nuevaDefensa);
 
+    void modificarEstadisticas(int hp, int atk, int def);
 
-// ======================= GETTERS =========================
-
-    std::string getNombre() const; // Se agrega const para que lo traiga sin modificarlo
+    // Getters...
+    std::string getNombre() const;
     std::string getDescripcion() const;
     int getPuntosDeVida() const;
     int getAtaque() const;

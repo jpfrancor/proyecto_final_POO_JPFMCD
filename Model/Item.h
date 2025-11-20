@@ -1,40 +1,31 @@
-//
-// Created by jpfra on 11/11/25.
-//
-
 #ifndef PROYECTOFINALPOO_ITEM_H
 #define PROYECTOFINALPOO_ITEM_H
 
 #include <string>
 #include <iostream>
-#include "Entidad.h"
+// BORRA EL #include "Entidad.h" DE AQUÍ SI LO TIENES
+
+// AGREGA ESTO (Forward Declaration):
+class Entidad;
 
 class Item {
 protected:
-    // Atributos base que comparten todos los objetos
     std::string nombre;
     std::string descripcion;
-    bool esConsumible; // Para saber si se elimina del inventario después de usarlo.
+    bool esConsumible;
 
 public:
-    // Constructor
     Item(std::string nombre, std::string descripcion, bool esConsumible);
-
-    // Destructor virtual
     virtual ~Item() = default;
 
-    // Metodo abstracto (puro virtual) clave del diseño:
-    // Define el efecto del ítem. Fuerza a las subclases a implementarlo.
-    // Recibe un puntero a Entidad (el Heroe) para modificar sus stats.
+    // Ahora el compilador ya no llorará aquí
     virtual void usar(Entidad* objetivo) = 0;
 
-    // ======================= GETTERS =========================
-
+    // Getters...
     std::string getNombre() const;
     std::string getDescripcion() const;
-    int getValor() const;
     bool getEsConsumible() const;
+    int getValor() const;
 };
-
 
 #endif //PROYECTOFINALPOO_ITEM_H
