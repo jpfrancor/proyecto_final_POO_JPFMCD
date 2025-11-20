@@ -3,21 +3,30 @@ project(JuegoRPG)
 
 set(CMAKE_CXX_STANDARD 17)
 
-# Aquí le decimos a CLion que cree un ejecutable llamado "JuegoRPG"
-# usando TODOS tus archivos .cpp
+# IMPORTANTE: Esto permite que tus archivos .cpp encuentren los .h
+# aunque estén en carpetas diferentes (Model, View, Controller)
+include_directories(Controller Model View)
+
 add_executable(JuegoRPG
         main.cpp
-        Controlador.cpp
-        Vista.cpp
-        Entidad.cpp
-        Heroe.cpp
-        Guardia.cpp
-        Esqueleto.cpp
-        Jefe.cpp
-        Item.cpp
-        Arma.cpp
-        Armadura.cpp
-        Curativo.cpp
-        Habitacion.cpp
-        LugarDeInteraccion.cpp
+
+        # Archivos del Controlador
+        Controller/Controlador.cpp
+        # Si tienes Controlador.h, no es obligatorio ponerlo aquí pero ayuda a organizarse
+
+        # Archivos de la Vista
+        View/Vista.cpp
+
+        # Archivos del Modelo (Entidades e Items)
+        Model/Entidad.cpp
+        Model/Heroe.cpp
+        Model/Guardia.cpp
+        Model/Esqueleto.cpp
+        Model/Jefe.cpp
+        Model/Item.cpp
+        Model/Arma.cpp
+        Model/Armadura.cpp
+        Model/Curativo.cpp
+        Model/Habitacion.cpp
+        Model/LugarDeInteraccion.cpp
 )
