@@ -152,7 +152,7 @@ void Controlador::procesarMovimiento() {
 
 void Controlador::procesarInteraccion() {
     // Preguntar qué quiere investigar
-    // Por simplicidad, interactuamos con todo lo que haya en la sala secuencialmente
+    // Por simplicidad, interactuamos con todas las cosas que haya en la sala secuencialmente
     // Lo ideal sería listar las interacciones y elegir.
 
     // Nota: En tu Habitacion.h necesitas un metodo getInteracciones() publico o
