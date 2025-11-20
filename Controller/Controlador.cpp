@@ -299,33 +299,58 @@ void Controlador::procesarInventario() {
     }
 }
 
+
+
     void Controlador::guardarPartida() {
-        // Creamos el archivo "savegame.txt"
-        std::ofstream archivo("savegame.txt");
+    std::ofstream archivo("savegame.txt");
 
-        if (archivo.is_open()) {
-            // Guardamos DATOS en orden. Usamos endl para separar líneas.
-            // IMPORTANTE: Guardamos nombres SIN espacios o usamos getline al leer.
-            // Para simplificar, asumiremos que el nombre del heroe no tiene espacios o se maneja simple.
+    if (archivo.is_open()) {
+        // 1. Datos del Héroe (Igual que antes)
+        archivo << heroe->getNombre() << std::endl;
+        archivo << heroe->getNivel() << std::endl;
+        archivo << heroe->getExperiencia() << std::endl;
+        archivo << heroe->getPuntosDeVida() << std::endl;
+        archivo << heroe->getPuntosDeVidaMax() << std::endl;
+        archivo << heroe->getAtaque() << std::endl;
+        archivo << heroe->getDefensa() << std::endl;
 
-            archivo << heroe->getNombre() << std::endl;
-            archivo << heroe->getNivel() << std::endl;
-            archivo << heroe->getExperiencia() << std::endl;
-            archivo << heroe->getPuntosDeVida() << std::endl;
-            archivo << heroe->getPuntosDeVidaMax() << std::endl;
-            archivo << heroe->getAtaque() << std::endl;
-            archivo << heroe->getDefensa() << std::endl;
+        // 2. Ubicación
+        archivo << habitacionActual->getNombre() << std::endl;
 
-            // Guardamos el NOMBRE de la habitación actual
-            archivo << habitacionActual->getNombre() << std::endl;
+        // === 3. NUEVO: GUARDAR INVENTARIO ===
+        // Escribimos cuántos items tenemos para saber cuántos leer luego
+        archivo << heroe->getInventario().size() << std::endl;
 
-            archivo.close();
-            vista.mostrarMensaje(">>> Partida guardada exitosamente en 'savegame.txt' <<<");
-        } else {
-            vista.mostrarMensaje("Error: No se pudo crear el archivo de guardado.");
+        for (Item* item : heroe->getInventario()) {
+            // Detectamos el tipo para saber cómo guardarlo
+            // TIPO 1: Curativo | TIPO 2: Arma | TIPO 3: Armadura
+
+            if (dynamic_cast<Curativo*>(item)) {
+                // Guardamos: 1 Nombre_Junto Valor
+                // TRUCO: Reemplazamos espacios por guiones bajo para que archivo >> funcione bien
+                std::string nombreGuardable = item->getNombre();
+                // (Por simplicidad asumimos nombres sin espacios o usaremos una sola palabra en el txt)
+
+                // Para este nivel, guardaremos: TIPO NOMBRE_SIN_ESPACIOS VALOR
+                // Asegúrate de que tus items como "Pocion Grande" se guarden como "PocionGrande" o usa solo 1 palabra.
+                archivo << 1 << " " << item->getNombre() << " " << 5 << std::endl;
+                // NOTA: Recuperar el valor exacto (5, 10, 50) es difícil sin getters específicos.
+                // Solución rápida: Guardamos el nombre y al cargar recreamos el objeto estándar.
+            }
+            else if (dynamic_cast<Arma*>(item)) {
+                archivo << 2 << " " << item->getNombre() << " " << ((Arma*)item)->getPuntosAtaque() << std::endl;
+            }
+            else if (dynamic_cast<Armadura*>(item)) {
+                archivo << 3 << " " << item->getNombre() << " " << ((Armadura*)item)->getDefensaExtra() << std::endl;
+            }
         }
-    }
 
+        archivo.close();
+        vista.mostrarMensaje(">>> Partida y Equipo guardados. <<<");
+    } else {
+        vista.mostrarMensaje("Error al guardar.");
+    }
+}
     void Controlador::cargarPartida(){
 
     std::ifstream archivo("savegame.txt");
@@ -369,7 +394,30 @@ void Controlador::procesarInventario() {
                 break;
             }
         }
+        int cantidadItems;
+        archivo >> cantidadItems; // Leemos cuántos objetos había
 
+        for (int i = 0; i < cantidadItems; i++) {
+            int tipo, valor;
+            std::string nombreItem;
+
+            archivo >> tipo >> nombreItem >> valor; // Leemos: 2 Espada 15
+
+            Item* nuevoItem = nullptr;
+
+            if (tipo == 1) {
+                // Reconstruimos poción (Nombre, DescripcionDummy, Valor)
+                nuevoItem = new Curativo(nombreItem, "Item recuperado", valor);
+            } else if (tipo == 2) {
+                nuevoItem = new Arma(nombreItem, "Arma recuperada", valor);
+            } else if (tipo == 3) {
+                nuevoItem = new Armadura(nombreItem, "Armadura recuperada", valor);
+            }
+
+            if (nuevoItem != nullptr) {
+                heroe->agregarItemInventario(nuevoItem);
+            }
+        }
         if (!encontrada) {
             vista.mostrarMensaje("Advertencia: No se encontro la habitacion guardada. Iniciando en la primera.");
             habitacionActual = mapaGlobal[0]; // Fallback de seguridad
@@ -381,6 +429,7 @@ void Controlador::procesarInventario() {
         vista.mostrarMensaje("No existe ningun archivo de guardado anterior.");
     }
 }
+
 
 
 
