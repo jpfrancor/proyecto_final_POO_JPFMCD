@@ -322,26 +322,27 @@ void Controlador::procesarInventario() {
         archivo << heroe->getInventario().size() << std::endl;
 
         for (Item* item : heroe->getInventario()) {
-            // Detectamos el tipo para saber cómo guardarlo
             // TIPO 1: Curativo | TIPO 2: Arma | TIPO 3: Armadura
 
             if (dynamic_cast<Curativo*>(item)) {
-                // Guardamos: 1 Nombre_Junto Valor
-                // TRUCO: Reemplazamos espacios por guiones bajo para que archivo >> funcione bien
-                std::string nombreGuardable = item->getNombre();
-                // (Por simplicidad asumimos nombres sin espacios o usaremos una sola palabra en el txt)
-
-                // Para este nivel, guardaremos: TIPO NOMBRE_SIN_ESPACIOS VALOR
-                // Asegúrate de que tus items como "Pocion Grande" se guarden como "PocionGrande" o usa solo 1 palabra.
-                archivo << 1 << " " << item->getNombre() << " " << 5 << std::endl;
-                // NOTA: Recuperar el valor exacto (5, 10, 50) es difícil sin getters específicos.
-                // Solución rápida: Guardamos el nombre y al cargar recreamos el objeto estándar.
+                archivo << 1 << std::endl; // Tipo
+                archivo << item->getNombre() << std::endl; // Nombre completo
+                archivo << item->getDescripcion() << std::endl; // Descripción original
+                // Recuperamos el valor. Como item genérico no tiene getValorCuracion,
+                // hacemos un cast temporal seguro:
+                archivo << ((Curativo*)item)->getValorCuracion() << std::endl;
             }
             else if (dynamic_cast<Arma*>(item)) {
-                archivo << 2 << " " << item->getNombre() << " " << ((Arma*)item)->getPuntosAtaque() << std::endl;
+                archivo << 2 << std::endl;
+                archivo << item->getNombre() << std::endl;
+                archivo << item->getDescripcion() << std::endl;
+                archivo << ((Arma*)item)->getPuntosAtaque() << std::endl;
             }
             else if (dynamic_cast<Armadura*>(item)) {
-                archivo << 3 << " " << item->getNombre() << " " << ((Armadura*)item)->getDefensaExtra() << std::endl;
+                archivo << 3 << std::endl;
+                archivo << item->getNombre() << std::endl;
+                archivo << item->getDescripcion() << std::endl;
+                archivo << ((Armadura*)item)->getDefensaExtra() << std::endl;
             }
         }
 
@@ -396,27 +397,42 @@ void Controlador::procesarInventario() {
         }
         int cantidadItems;
         archivo >> cantidadItems; // Leemos cuántos objetos había
+        archivo.ignore();
 
         for (int i = 0; i < cantidadItems; i++) {
-            int tipo, valor;
+            int tipo;
             std::string nombreItem;
+            std::string descItem;
+            int valor;
 
             archivo >> tipo >> nombreItem >> valor; // Leemos: 2 Espada 15
+            archivo.ignore();
+
+            std::getline(archivo, nombreItem);
+            std::getline(archivo, descItem);
+
+            archivo >> valor;
+            archivo.ignore();
 
             Item* nuevoItem = nullptr;
 
             if (tipo == 1) {
-                // Reconstruimos poción (Nombre, DescripcionDummy, Valor)
-                nuevoItem = new Curativo(nombreItem, "Item recuperado", valor);
-            } else if (tipo == 2) {
-                nuevoItem = new Arma(nombreItem, "Arma recuperada", valor);
-            } else if (tipo == 3) {
-                nuevoItem = new Armadura(nombreItem, "Armadura recuperada", valor);
+                // Constructor(Nombre, Descripcion, Curacion)
+                nuevoItem = new Curativo(nombreItem, descItem, valor);
+            }
+            else if (tipo == 2) {
+                // Constructor(Nombre, Descripcion, Daño)
+                nuevoItem = new Arma(nombreItem, descItem, valor);
+            }
+            else if (tipo == 3) {
+                // Constructor(Nombre, Descripcion, Defensa)
+                nuevoItem = new Armadura(nombreItem, descItem, valor);
             }
 
             if (nuevoItem != nullptr) {
                 heroe->agregarItemInventario(nuevoItem);
             }
+
         }
         if (!encontrada) {
             vista.mostrarMensaje("Advertencia: No se encontro la habitacion guardada. Iniciando en la primera.");

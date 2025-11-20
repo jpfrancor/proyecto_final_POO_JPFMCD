@@ -3,7 +3,7 @@
 //
 
 #include "Curativo.h"
-#include "Heroe.h" // ¡Ahora incluimos Heroe.h!
+#include "Heroe.h"
 #include <iostream>
 
 Curativo::Curativo(std::string nombre, std::string descripcion, int curacion)
@@ -39,4 +39,8 @@ void Curativo::usar(Entidad* objetivo) {
     } else {
         std::cout << "ERROR: Solo el Heroe puede usar items curativos." << std::endl;
     }
+}
+    // Getters
+    int Curativo::getValorCuracion() const {
+    return valorCuracion;
 }
