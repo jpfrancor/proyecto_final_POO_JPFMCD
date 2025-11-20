@@ -7,7 +7,7 @@
 #include <algorithm> // para transform
 #include <cctype>    // para tolower
 
-Controlador::Controlador() : heroe(nullptr), habitacionActual(nullptr), juegoTerminado(false) {}
+Controlador::Controlador() : heroe(nullptr), habitacionActual(nullptr), habitacionAnterior(nullptr), juegoTerminado(false) {}
 
 Controlador::~Controlador() {
     delete heroe;
@@ -119,8 +119,29 @@ void Controlador::procesarCombate() {
         } else if (op == 2) {
             procesarInventario(); // Usar item en combate
         } else if (op == 3) {
-            vista.mostrarMensaje("¡Intentas huir pero te bloquean el paso!");
-            // Podrías agregar % de éxito
+            // Antes de permitir escape, vemos si es el jefe final (que no escapen da mas susto)
+            // Usamos dynamic_cast para ver si el enemigo es de la clase Jefe
+            if (dynamic_cast<Jefe*>(enemigo) != nullptr) {
+                vista.mostrarMensaje("¡Es inútil! La oscuridad no permite marcha atras. No puedes huir de Chameni, la Engendra del Calabozo.");
+                // No hay return para que el jugador pierda el turno por cobarde!!!
+            }
+            else {
+                // Calculamos la probabilidad de que escape el jugador
+                int suerte = std::rand() % 100; // Genera 0 a 99
+
+                if (suerte < 50) {
+                    // FRACASO
+                    vista.mostrarMensaje("¡Intentaste correr pero te tropezaste! El enemigo aprovecha tu error.");
+                    // No hay return para que se pierda turno y recibir daño
+                } else {
+                    // EXITO DE ESCAPE
+                    vista.mostrarMensaje("¡Logras evitar los golpes y sales ileso. Escapaste!");
+                    if (habitacionAnterior != nullptr) {
+                        habitacionActual = habitacionAnterior;
+                    }
+                    return; //El return nos saca de la funcion para que volvamos a la habitacion sin combate.
+                }
+            }
         }
 
         // Turno Enemigo (si sigue vivo)
@@ -162,7 +183,8 @@ void Controlador::procesarMovimiento() {
     Habitacion* destino = habitacionActual->getSalida(direccion);
 
     if (destino != nullptr) {
-        habitacionActual = destino;
+        this->habitacionAnterior = this->habitacionActual; // Se guarda la habitacion anterior
+        this->habitacionActual = destino;
         vista.mostrarMensaje("Te mueves hacia el " + direccion);
     } else {
         vista.mostrarMensaje("No hay salida hacia el " + direccion);

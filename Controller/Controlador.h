@@ -22,6 +22,7 @@ class Controlador {
 private:
     Heroe* heroe;
     Habitacion* habitacionActual;
+    Habitacion* habitacionAnterior;
     Vista vista;
     bool juegoTerminado;
 
