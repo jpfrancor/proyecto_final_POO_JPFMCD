@@ -29,7 +29,7 @@ void Jefe::movimiento1(Entidad& objetivo) {
             break;
         case 1:
             std::cout << this->nombre << " usa [Prision de Sombras], reduciendo la defensa de " << objetivo.getNombre() << "." << std::endl;
-            objetivo.setDefensa(objetivo.getDefensa() - 2);
+            objetivo.modificarEstadisticas(0, 0, -2);
             break;
         case 2:
             std::cout << this->nombre << " desata [Juicio del Calabozo]! Un ataque devastador sobre " << objetivo.getNombre() << "." << std::endl;

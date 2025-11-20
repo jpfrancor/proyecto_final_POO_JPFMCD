@@ -44,8 +44,6 @@ public:
 
     void recibirDanio(int cantidad);
 
-    void setDefensa(int nuevaDefensa);
-
     void modificarEstadisticas(int hp, int atk, int def);
 
     // Getters...
