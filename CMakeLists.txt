@@ -1,27 +1,23 @@
-cmake_minimum_required(VERSION 4.0)
-project(proyectoFinalPOO)
+cmake_minimum_required(VERSION 3.10)
+project(JuegoRPG)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 
-add_executable(proyectoFinalPOO main.cpp
-        Model/Entidad.cpp
-        Model/Entidad.h
-        Model/Item.cpp
-        Model/Item.h
-        Model/Heroe.cpp
-        Model/Heroe.h
-        Model/Habitacion.cpp
-        Model/Habitacion.h
-        Model/Jefe.cpp
-        Model/Jefe.h
-        Model/Guardia.cpp
-        Model/Guardia.h
-        Model/Esqueleto.cpp
-        Model/Esqueleto.h
-        Model/LugarDeInteraccion.cpp
-        Model/LugarDeInteraccion.h
-        Model/Arma.cpp
-        Model/Arma.h
-        View/Vista.cpp
-        View/Vista.h
+# Aquí le decimos a CLion que cree un ejecutable llamado "JuegoRPG"
+# usando TODOS tus archivos .cpp
+add_executable(JuegoRPG
+        main.cpp
+        Controlador.cpp
+        Vista.cpp
+        Entidad.cpp
+        Heroe.cpp
+        Guardia.cpp
+        Esqueleto.cpp
+        Jefe.cpp
+        Item.cpp
+        Arma.cpp
+        Armadura.cpp
+        Curativo.cpp
+        Habitacion.cpp
+        LugarDeInteraccion.cpp
 )
