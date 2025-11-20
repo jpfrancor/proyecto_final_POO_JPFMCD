@@ -23,4 +23,3 @@ void Curativo::usar(Entidad* objetivo) {
         std::cout << "ERROR: Solo el Heroe puede usar items curativos." << std::endl;
     }
 }
-}

@@ -32,4 +32,3 @@ void Esqueleto::movimiento1(Entidad& objetivo) {
     std::cout << this->nombre << " ataca con su Hueso Roto." << std::endl;
     objetivo.recibirDanio(this->ataque);
 }
-}
