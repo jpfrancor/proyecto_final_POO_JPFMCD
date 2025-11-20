@@ -20,33 +20,31 @@ void LugarDeInteraccion::ejecutarInteraccion(Heroe& heroe) {
   std::cout << "Interactuas con " << this->nombre << "..." << std::endl;
   std::cout << this->descripcion << std::endl;
 
-  // Si ya se busco en el sitio, no hacemos nada mas
+  // Si ya se usó el sitio
   if (this->usado) {
-    std::cout << "No parece haber nada mas de interes aqui." << std::endl;
-    return;
+    std::cout << "Ya no queda nada util aqui." << std::endl;
+    return; // <--- IMPORTANTE: Salir aquí
   }
 
-  // 1. Lógica si hay un Item
+  // Si hay un Item
   if (this->itemOculto != nullptr) {
     std::cout << "¡Encontraste un objeto: " << itemOculto->getNombre() << "!" << std::endl;
     heroe.agregarItemInventario(itemOculto);
 
-    // IMPORTANTE: El héroe ahora es dueño del item.
-    // Ponemos el puntero a nullptr para que el destructor de LugarDeInteraccion no lo borre por error.
     this->itemOculto = nullptr;
-    this->usado = true; // Un solo uso para evitar...abusoooo
+    this->usado = true;
+    return; // <--- AGREGA ESTO: Si encontró algo, termina la función YA.
   }
 
-  // 2. Lógica si hay Curación
+  // Si hay Curación
   if (this->puntosDeCuracion > 0) {
     std::cout << "Sientes una energia revitalizante." << std::endl;
     heroe.curarse(this->puntosDeCuracion);
-    this->usado = true; // Los altares se agotan
+
+    this->usado = true;
+    return; // <--- AGREGA ESTO: Si curó, termina la función YA.
   }
 
-  // 3. Si no había nada (bromita)
-  if (this->itemOculto == nullptr && this->puntosDeCuracion == 0) {
-    std::cout << "Paila, al parecer no hay nada aqui." << std::endl;
-    // No lo volvemos usado para que el mensaje pueda seguir apareciendo indefinidamente.
-  }
+  // Esto solo aparece si no hay NADA mas en el lugar
+  std::cout << "Paila, al parecer no hay nada aqui." << std::endl;
 }
