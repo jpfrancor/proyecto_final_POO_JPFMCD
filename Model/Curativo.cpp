@@ -11,16 +11,16 @@ Curativo::Curativo(std::string nombre, std::string descripcion, int curacion)
     this->valorCuracion = curacion;
 
     if (curacion <= 5) {
-        // Hierbas (Debiles) -> Comun (90% de caer)
-        this->probabilidadDrop = 90;
+        // Hierbas (Debiles) -> Comun (70% de caer)
+        this->probabilidadDrop = 70;
     }
     else if (curacion <= 15) {
-        // Vendas (Medias) -> Raro (50% de caer)
-        this->probabilidadDrop = 50;
+        // Vendas (Medias) -> Raro (30% de caer)
+        this->probabilidadDrop = 30;
     }
     else {
-        // Pocima de Curacion (Fuerte) -> Epico (20% de caer)
-        this->probabilidadDrop = 20;
+        // Pocima de Curacion (Fuerte) -> Epico (10% de caer)
+        this->probabilidadDrop = 10;
     }
 }
 

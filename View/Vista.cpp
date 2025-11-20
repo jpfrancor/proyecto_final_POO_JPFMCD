@@ -66,7 +66,7 @@ void Vista::mostrarLugar(Habitacion* habitacion) {
     cout << habitacion->getDescripcion() << endl;
 
     // Mostrar salidas
-    cout << "Salidas visibles: ";
+    cout << "Movimientos posibles: ";
     for (auto const& [direccion, puntero] : habitacion->getSalidas()) {
         cout << "[" << direccion << "] ";
     }

@@ -13,8 +13,8 @@ Arma::Arma(std::string nombre, std::string descripcion, int danio)
     this->puntosDeAtaque = danio;
 
     // Si el arma hace poco daño, es común. Si es fuerte, es rara.
-    if (danio <= 5) this->probabilidadDrop = 50;      // Para lanza
-    else if (danio >= 15) this->probabilidadDrop = 15; // Para espada del heroe
+    if (danio <= 5) this->probabilidadDrop = 30;      // Para lanza
+    else if (danio >= 15) this->probabilidadDrop = 10; // Para espada del heroe
 }
 void Arma::usar(Entidad* usuario) {
     // Intentamos convertir al usuario en Héroe

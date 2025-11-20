@@ -12,8 +12,8 @@ Armadura::Armadura(std::string nombre, std::string descripcion, int defensa)
     this->defensaExtra = defensa;
 
     // Probabilidad
-    if (defensa == 3) this->probabilidadDrop = 60;     // Pechera
-    else if (defensa == 7) this->probabilidadDrop = 15; // Armadura del heroe
+    if (defensa == 3) this->probabilidadDrop = 30;     // Pechera
+    else if (defensa == 7) this->probabilidadDrop = 10; // Armadura del heroe
 }
 
 void Armadura::usar(Entidad* usuario) {

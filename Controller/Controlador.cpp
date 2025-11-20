@@ -15,29 +15,29 @@ Controlador::~Controlador() {
 }
 
 void Controlador::inicializarMapa() {
-    // 1. Crear Habitaciones
-    Habitacion* celda = new Habitacion("Celda Prision", "Una celda humeda y oscura.", 1);
-    Habitacion* pasillo = new Habitacion("Pasillo de Piedra", "Antorchas iluminan tenuemente las paredes.", 1);
+    // Habitaciones
+    Habitacion* entrada = new Habitacion("Entrada del Calabozo", "Te aproximas al temido Calabozo de Erelis, una ciudad macabra con una historia violenta. \nVas en busca de tu hija de 5 anios, Carlotta, que desapareció hace tres semanas justo aquí, en el Calabozo.", 1);
+    Habitacion* pasillo = new Habitacion("Pasillo Principal", "Entras al calabozo, dispuesto a salvar a tu hija. Tus ojos se adaptan a la poca luz, solo algunas antorchas iluminan tu camino.\nEl pasillo se extiende hacia la oscuridad, no ves su final, pero escuchas el traqueteo de...huesos?", 1);
     Habitacion* armeria = new Habitacion("Armeria Abandonada", "Estantes rotos y armas oxidadas.", 2);
     Habitacion* salaTrono = new Habitacion("Sala del Trono", "El aire es pesado aqui. El Jefe espera.", 3);
 
-    // 2. Conectar Habitaciones
-    celda->agregarSalida("Norte", pasillo);
-    pasillo->agregarSalida("Sur", celda);
+    // Conexiones entre Habitaciones
+    entrada->agregarSalida("Norte", pasillo);
+    pasillo->agregarSalida("Sur", entrada);
     pasillo->agregarSalida("Este", armeria);
     pasillo->agregarSalida("Norte", salaTrono);
     armeria->agregarSalida("Oeste", pasillo);
     salaTrono->agregarSalida("Sur", pasillo);
 
-    // 3. Agregar Enemigos
+    //Agregamos Enemigos
     pasillo->agregarEnemigo(new Esqueleto("Esqueleto Errante", "Un monton de huesos vivientes.", 20, 5, 1));
     armeria->agregarEnemigo(new Guardia("Guardia Corrupto", "Un guardia que olvido su juramento.", 40, 10, 3));
     salaTrono->agregarEnemigo(new Jefe("Chameni", "El señor oscuro del calabozo.", 100, 20, 10));
 
-    // 4. Agregar Interacciones (Loot)
+    //Agregamos Interacciones
     // Cofre en la celda
-    Item* pocion = new Curativo("Pocima de Curacion", "Curacion alta, para las mayores batallas. +25HP.", 25);
-    celda->agregarInteraccion(new LugarDeInteraccion("Cofre Viejo", "Bajo la cama", pocion, 0));
+    Item* hierbas1 = new Curativo("Hierbas", "Curacion baja. +5HP.", 5);
+    entrada->agregarInteraccion(new LugarDeInteraccion("Caja", "Una caja de cargamento antigua, no se sabe quien la dejo ahi.", hierbas1, 0));
 
     // Altar en la armería
     armeria->agregarInteraccion(new LugarDeInteraccion("Fuente Sagrada", "Agua brillante", nullptr, 50));
@@ -47,7 +47,7 @@ void Controlador::inicializarMapa() {
     armeria->agregarInteraccion(new LugarDeInteraccion("Expositor de Armas", "Vitrina rota", espada, 0));
 
     // 5. Definir inicio
-    this->habitacionActual = celda;
+    this->habitacionActual = entrada;
 }
 
 void Controlador::iniciar() {
@@ -55,7 +55,7 @@ void Controlador::iniciar() {
     std::string nombre = vista.pedirString();
 
     // Crear Héroe (Nombre, Desc, HP, Atk, Def)
-    heroe = new Heroe(nombre, "Un valiente aventurero, en busca de su hija perdida en la oscuridad.", 100, 10, 5);
+    heroe = new Heroe(nombre, "Un valiente aventurero, en busca de su hija perdida en la oscuridad.", 100, 10, 1);
 
     inicializarMapa();
 
@@ -107,7 +107,7 @@ void Controlador::procesarCombate() {
     Entidad* enemigo = enemigos[0];
 
     while (enemigo->getPuntosDeVida() > 0 && heroe->getPuntosDeVida() > 0) {
-        vista.mostrarMensaje("\nVs: " + enemigo->getNombre() + " (HP: " + std::to_string(enemigo->getPuntosDeVida()) + ")");
+        vista.mostrarMensaje("\nVS.: " + enemigo->getNombre() + " (HP: " + std::to_string(enemigo->getPuntosDeVida()) + ")");
         vista.mostrarMenuCombate();
         int op = vista.pedirOpcion();
 
