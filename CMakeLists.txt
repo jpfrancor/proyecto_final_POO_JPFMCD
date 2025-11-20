@@ -3,8 +3,7 @@ project(JuegoRPG)
 
 set(CMAKE_CXX_STANDARD 17)
 
-# IMPORTANTE: Esto permite que tus archivos .cpp encuentren los .h
-# aunque estén en carpetas diferentes (Model, View, Controller)
+# IMPORTANTE: Esto permite quelos .cpp encuentren los .h aunque estén en carpetas diferentes
 include_directories(Controller Model View)
 
 add_executable(JuegoRPG
@@ -12,7 +11,6 @@ add_executable(JuegoRPG
 
         # Archivos del Controlador
         Controller/Controlador.cpp
-        # Si tienes Controlador.h, no es obligatorio ponerlo aquí pero ayuda a organizarse
 
         # Archivos de la Vista
         View/Vista.cpp
