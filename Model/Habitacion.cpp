@@ -115,3 +115,7 @@ const std::vector<Entidad*>& Habitacion::getEnemigos() const {
 const std::map<std::string, Habitacion*>& Habitacion::getSalidas() const {
     return salidas;
 }
+
+const std::vector<LugarDeInteraccion*>& Habitacion::getInteracciones() const {
+    return interacciones; //Con esto mostramos las interacciones disponibles
+}

@@ -151,22 +151,33 @@ void Controlador::procesarMovimiento() {
 }
 
 void Controlador::procesarInteraccion() {
-    // Preguntar qué quiere investigar
-    // Por simplicidad, interactuamos con todas las cosas que haya en la sala secuencialmente
-    // Lo ideal sería listar las interacciones y elegir.
+    // 1. Obtenemos la lista de cosas en la habitación actual
+    // (Asegúrate de haber agregado el getter en el paso 1)
+    const std::vector<LugarDeInteraccion*>& lista = habitacionActual->getInteracciones();
 
-    // Nota: En tu Habitacion.h necesitas un metodo getInteracciones() publico o
-    // usar el metodo interactuarCon(nombre).
+    // 2. Le decimos a la vista que muestre la lista numerada
+    vista.mostrarInteraccionesDisponibles(lista);
 
-    vista.mostrarMensaje("¿Que quieres investigar? (Escribe el nombre exacto del objeto/lugar):");
-    // Mostramos qué hay
-    // (Asumiendo que puedes acceder a la lista o implementar un metodo 'mostrarInteracciones' en habitacion)
+    if (lista.empty()) return; // Si no hay nada, salimos
 
-    std::string nombre = vista.pedirString();
-    bool exito = habitacionActual->interactuarCon(nombre, *heroe);
+    // 3. Pedimos el número al usuario
+    int opcion = vista.pedirOpcion();
 
-    if (!exito) {
-        vista.mostrarMensaje("No ves eso por aqui.");
+    // 4. Lógica de selección
+    if (opcion == 0) {
+        vista.mostrarMensaje("Decides no tocar nada.");
+        return;
+    }
+
+    // Validamos que el número sea válido (entre 1 y el tamaño de la lista)
+    if (opcion > 0 && opcion <= lista.size()) {
+        // El vector empieza en 0, pero el menú empieza en 1, así que restamos 1
+        LugarDeInteraccion* lugarElegido = lista[opcion - 1];
+
+        // Ejecutamos la interacción
+        lugarElegido->ejecutarInteraccion(*heroe);
+    } else {
+        vista.mostrarMensaje("Opcion no valida.");
     }
 }
 

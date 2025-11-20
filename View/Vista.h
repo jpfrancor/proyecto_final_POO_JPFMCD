@@ -34,6 +34,9 @@ public:
     // Con esto se imprimen los mensajes
     void mostrarMensaje(std::string mensaje);
 
+    //Mostramos los sitios de bbusqueda
+    void mostrarInteraccionesDisponibles(const std::vector<LugarDeInteraccion*>& lista);
+
     // Captura la entrada del usuario (int)
     int pedirOpcion();
 

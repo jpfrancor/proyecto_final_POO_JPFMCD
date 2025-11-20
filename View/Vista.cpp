@@ -84,6 +84,28 @@ void Vista::mostrarLugar(Habitacion* habitacion) {
     }
 }
 
+void Vista::mostrarInteraccionesDisponibles(const std::vector<LugarDeInteraccion*>& lista) {
+    std::cout << "\n--- OBJETOS VISIBLES ---" << std::endl;
+
+    if (lista.empty()) {
+        std::cout << "No ves nada interesante aqui." << std::endl;
+        return;
+    }
+
+    for (size_t i = 0; i < lista.size(); ++i) {
+        // Mostramos "1. Nombre", "2. Nombre"
+        std::cout << (i + 1) << ". " << lista[i]->getNombre();
+
+        // Opcional: Mostrar si ya fue usado para que el jugador sepa
+        if (lista[i]->isUsado()) {
+            std::cout << " (Ya investigado)";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << "0. Cancelar" << std::endl;
+    std::cout << "Selecciona un numero: ";
+}
+
 void Vista::mostrarHUD(Heroe* heroe) {
     cout << "\n[" << heroe->getNombre() << " | Nvl: " << heroe->getNivel()
          << " | HP: " << heroe->getPuntosDeVida() << "/" << heroe->getPuntosDeVidaMax()

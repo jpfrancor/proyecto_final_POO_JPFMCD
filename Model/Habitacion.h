@@ -64,6 +64,7 @@ public:
     int getNivel() const;
     const std::vector<Entidad*>& getEnemigos() const;
     const std::map<std::string, Habitacion*>& getSalidas() const;
+    const std::vector<LugarDeInteraccion*>& getInteracciones() const;
 };
 
 
