@@ -22,7 +22,7 @@ Guardia::Guardia(std::string nombre, std::string descripcion, int pv, int atk, i
     this->inventario.push_back(new Curativo("Pocion de Curacion", "Curacion alta, para las mayores batallas. +25HP.", 25));
 
 
-    this->inventario.push_back(new Arma("Espada del Heroe", "Espada formidable disennada para los mayores guerreros. +10ATK.", 15));
+    this->inventario.push_back(new Arma("Espada del Heroe", "Espada formidable disennada para los mayores guerreros. +15ATK.", 15));
     this->inventario.push_back(new Armadura("Pechera del Heroe", "Pechera formidable disennada para los mayores guerreros. +10DEF.", 10));
 }
 

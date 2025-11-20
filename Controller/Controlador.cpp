@@ -36,14 +36,14 @@ void Controlador::inicializarMapa() {
 
     // 4. Agregar Interacciones (Loot)
     // Cofre en la celda
-    Item* pocion = new Curativo("Pocion Pequena", 20);
+    Item* pocion = new Curativo("Pocima de Curacion", "Curacion alta, para las mayores batallas. +25HP.", 25);
     celda->agregarInteraccion(new LugarDeInteraccion("Cofre Viejo", "Bajo la cama", pocion, 0));
 
     // Altar en la armería
     armeria->agregarInteraccion(new LugarDeInteraccion("Fuente Sagrada", "Agua brillante", nullptr, 50));
 
     // Arma en la armería (Cofre)
-    Item* espada = new Arma("Espada Real", 25);
+    Item* espada = new Arma("Espada del Heroe","Espada formidable disennada para los mayores guerreros. +15ATK.",  25);
     armeria->agregarInteraccion(new LugarDeInteraccion("Expositor de Armas", "Vitrina rota", espada, 0));
 
     // 5. Definir inicio
