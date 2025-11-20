@@ -181,10 +181,76 @@ void Controlador::procesarInteraccion() {
     }
 }
 
+
+
+
+    // Validar rango para no coger objetos por fuera
+    if (opcion > 0 && opcion <= mochila.size()) {
+        // Ajustamos indice (Usuario pone 1 pero el Vector empieza en 0)
+        int indice = opcion - 1;
+        Item* itemElegido = mochila[indice];
+
+        // Usar esta hecho para manejar la funcion de cualquiera de los 3 objetos, POLIMORFISMO
+        itemElegido->usar(heroe);
+
+        // === LÓGICA DE CONSUMIBLES ===
+        // Si cura, no se debe usar infinitamente, entonces lo borramos. Armas y armaduras se quedan indefinidamente
+        if (itemElegido->getEsConsumible()) {
+            // Lo sacamos del vector del héroe
+            heroe->eliminarItem(indice);
+            // Lo borramos de la memoria para evitar memory leak
+            delete itemElegido;
+        }
+    } else {
+        vista.mostrarMensaje("Opcion invalida.");
+    }
+}
+
 void Controlador::procesarInventario() {
-    // Aquí deberías recorrer heroe->inventario y permitir usar items.
-    // Requiere implementar getters públicos del inventario en Entidad.
-    vista.mostrarMensaje("Gestión de inventario pendiente de implementar getter publico.");
+    // Obtener el inventario
+    const std::vector<Item*>& mochila = heroe->getInventario();
+
+    // Si está vacío, avisar y salir
+    if (mochila.empty()) {
+        vista.mostrarMensaje("Tu inventario esta vacio.");
+        return;
+    }
+
+    // Mostrar el inventario
+    vista.mostrarInventario(mochila);
+
+    // Pedir número de inventario a elegir
+    int opcion = vista.pedirOpcion();
+
+    // Para salir del inventario
+    if (opcion == 0) return;
+
+    // Validar rango para no coger objetos por fuera
+    if (opcion > 0 && opcion <= mochila.size()) {
+        // Ajustamos indice (Usuario pone 1 pero el Vector empieza en 0)
+        int indice = opcion - 1;
+        Item* itemElegido = mochila[indice];
+
+        // Intentamos ver si el objeto es de tipo Curativo
+        Curativo* pocion = dynamic_cast<Curativo*>(itemElegido);
+
+        // Si ES curativo y la vida ya está al máximo no se usa para que el usuario no desperdicie
+        if (pocion != nullptr && heroe->getPuntosDeVida() >= heroe->getPuntosDeVidaMax()) {
+            vista.mostrarMensaje("Tu salud esta al maximo. No tiene sentido usar esto ahora.");
+            return; // Salimos aquí para NO gastar el objeto
+        }
+
+        // Si pasa la validación, lo usamos normalmente
+        // Usar esta construido para manejar la funcion de cualquiera de los 3 objetos, POLIMORFISMO
+        itemElegido->usar(heroe);
+
+        if (itemElegido->getEsConsumible()) {
+            heroe->eliminarItem(indice);
+            delete itemElegido;
+        }
+    } else {
+        vista.mostrarMensaje("Opcion invalida.");
+    }
 }
 
 void Controlador::guardarPartida() {

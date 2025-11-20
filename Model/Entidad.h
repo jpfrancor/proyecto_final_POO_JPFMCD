@@ -46,13 +46,16 @@ public:
 
     void modificarEstadisticas(int hp, int atk, int def);
 
-    // Getters...
+    void eliminarItem(int indice);
+
+    // Getters
     std::string getNombre() const;
     std::string getDescripcion() const;
     int getPuntosDeVida() const;
     int getAtaque() const;
     int getDefensa() const;
     int getPuntosDeVidaMax() const;
+    const std::vector<Item*>& getInventario() const;
 };
 
 #endif //PROYECTOFINALPOO_ENTIDAD_H

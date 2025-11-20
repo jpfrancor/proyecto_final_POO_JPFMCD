@@ -129,16 +129,20 @@ void Vista::mostrarMenuCombate() {
     cout << ">> ";
 }
 
-void Vista::mostrarInventario(Heroe* heroe) {
-    // Nota: Necesitas un getter publico del inventario en Entidad/Heroe para esto
-    // Asumo que agregas: const std::vector<Item*>& getInventarioVec() const { return inventario; }
-    // O implementas un metodo mostrarInventario en Heroe.
+void Vista::mostrarInventario(const std::vector<Item*>& inventario) {
+    std::cout << "\n=== MOCHILA DEL HEROE ===" << std::endl;
 
-    // Para simplificar la vista, asumimos que Heroe tiene un metodo para mostrarlo o accedemos al vector
-    // Aquí simulamos un mensaje genérico si no tienes el getter listo:
-    cout << "\n--- INVENTARIO ---" << endl;
-    // (Aquí recorrerías el vector del héroe)
-    cout << "Usa la logica del Controlador para listar items." << endl;
+    if (inventario.empty()) {
+        std::cout << "(Vacia)" << std::endl;
+        return;
+    }
+
+    for (size_t i = 0; i < inventario.size(); ++i) {
+        std::cout << "[" << (i + 1) << "] " << inventario[i]->getNombre()
+                  << " (" << inventario[i]->getDescripcion() << ")" << std::endl;
+    }
+    std::cout << "[0] Salir" << std::endl;
+    std::cout << "Elige un objeto para usar/equipar: ";
 }
 
 void Vista::mostrarMensaje(std::string mensaje) {

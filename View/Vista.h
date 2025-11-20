@@ -40,6 +40,9 @@ public:
     // Captura la entrada del usuario (int)
     int pedirOpcion();
 
+    //Mostrar el inventario
+    void mostrarInventario(const std::vector<Item*>& inventario);
+
     // Captura la entrada del usuario (string) para nombres
     std::string pedirString();
 };

@@ -83,6 +83,14 @@ void Entidad::modificarEstadisticas(int vida, int ataqueExtra, int defensaExtra)
     this->defensa += defensaExtra;
 }
 
+//Con esto sacamos un item del inventario
+void Entidad::eliminarItem(int indice) {
+    if (indice >= 0 && indice < inventario.size()) {
+        // Borra el elemento en la posición indice
+        inventario.erase(inventario.begin() + indice);
+    }
+}
+
 // ======================= GETTERS =========================
 
 std::string Entidad::getNombre() const {
@@ -106,4 +114,8 @@ int Entidad::getDefensa() const {
 }
 int Entidad::getPuntosDeVidaMax() const
 { return puntosDeVidaMax;
+}
+
+const std::vector<Item*>& Entidad::getInventario() const {
+    return inventario;
 }
