@@ -23,7 +23,7 @@ Guardia::Guardia(std::string nombre, std::string descripcion, int pv, int atk, i
 
 
     this->inventario.push_back(new Arma("Espada del Heroe", "Espada formidable disennada para los mayores guerreros. +15ATK.", 15));
-    this->inventario.push_back(new Armadura("Pechera del Heroe", "Pechera formidable disennada para los mayores guerreros. +10DEF.", 10));
+    this->inventario.push_back(new Armadura("Armadura del Heroe", "Armadura formidable disennada para los mayores guerreros. +7DEF.", 7));
 }
 
 // ======================= MÉTODOS PÚROS  =========================

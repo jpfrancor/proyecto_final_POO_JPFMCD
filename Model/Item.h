@@ -13,6 +13,7 @@ protected:
     std::string nombre;
     std::string descripcion;
     bool esConsumible;
+    int probabilidadDrop;
 
 public:
     Item(std::string nombre, std::string descripcion, bool esConsumible);
@@ -25,7 +26,7 @@ public:
     std::string getNombre() const;
     std::string getDescripcion() const;
     bool getEsConsumible() const;
-    int getValor() const;
+    int getProbabilidadDrop() const;
 };
 
 #endif //PROYECTOFINALPOO_ITEM_H

@@ -3,11 +3,14 @@
 //
 
 #include <iostream>
-#include "Entidad.h" // Incluimos el archivo de cabecera que acabamos de definir
-#include <algorithm> // Útil para lógica futura
+#include "Entidad.h"
+#include <cstdlib>  //para random
 
 #include "Heroe.h"
 #include "Item.h"
+#include "Arma.h"
+#include "Armadura.h"
+#include "Curativo.h"
 
 // Constructor
 Entidad::Entidad(std::string nombre, std::string descripcion, int hp, int atk, int def)
@@ -21,15 +24,33 @@ Entidad::Entidad(std::string nombre, std::string descripcion, int hp, int atk, i
 
 // Implementación del metodo morir.
 // Usa una referencia (&) al Heroe que derrotó a esta entidad (enemigo)
-void Entidad::morir(Heroe& heroe) { // Esta es la lógica central para el despojo (loot) de enemigos
-    std::cout << this->nombre << " ha sido derrotado." << std::endl; // 1. Lógica de drops: Itera sobre el inventario del enemigo.
+void Entidad::morir(Heroe& heroe) {
+    std::cout << "\n" << this->nombre << " ha sido derrotado." << std::endl;
+
+    bool soltoAlgo = false;
 
     for (Item* item : inventario) {
-        std::cout << this->nombre << " ha dejado caer: " << item->getNombre() << std::endl;
-        heroe.agregarItemInventario(item); //Transferencia del loot al inventario del Heroe
+        // Tiramos el dado (0 a 100)
+        int suerte = std::rand() % 100;
+
+        // Usamos la probabilidad propia de CADA item
+        // Si el dado saca MENOS que la probabilidad, el item cae.
+        // Ejemplo: Hierbas (90%), si sacas 50, cae. Excalibur (10%), si sacas 50, NO cae.
+        if (suerte <= item->getProbabilidadDrop()) {
+            std::cout << ">>> " << this->nombre << " ha dejado caer: " << item->getNombre() << "!" << std::endl;
+            heroe.agregarItemInventario(item);
+            soltoAlgo = true;
+        } else {
+            // El item se pierde
+            delete item;
+        }
     }
-    inventario.clear(); //Se limpia el inventario para no causar errores.
-    // Es importante NOTA: El puntero al Item se mueve al Heroe, no se borra.
+
+    inventario.clear();
+
+    if (!soltoAlgo) {
+        std::cout << this->nombre << " no dejo caer nada util." << std::endl;
+    }
 }
 
 // Implementación del mtodo para añadir objetos al inventario

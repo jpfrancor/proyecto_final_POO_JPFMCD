@@ -8,7 +8,8 @@
 Item::Item(std::string nombre, std::string descripcion, bool esConsumible)
     : nombre(nombre),
       descripcion(descripcion),
-      esConsumible(esConsumible)
+      esConsumible(esConsumible),
+      probabilidadDrop(100)
 {
     // Cuerpo vacío: tutti se inicializa en la lista de inicialización
 }
@@ -27,9 +28,6 @@ bool Item::getEsConsumible() const {
     return esConsumible;
 }
 
-// NOTA: No incluimos Entidad.h aquí, ya que el metodo funcion() es abstracto y
-// no se implementa en la clase base.
-
-// NOTA: El metodo funcion(Entidad* objetivo) NO se implementa aquí,
-// ya que es un metodo puro virtual (= 0). La implementación se deja
-// a las clases hijas (Curativo, Arma, Armadura).//
+int Item::getProbabilidadDrop() const {
+    return probabilidadDrop;
+}

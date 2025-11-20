@@ -9,7 +9,21 @@
 Curativo::Curativo(std::string nombre, std::string descripcion, int curacion)
     : Item(nombre, descripcion, true) { // true porque es consumible
     this->valorCuracion = curacion;
+
+    if (curacion <= 5) {
+        // Hierbas (Debiles) -> Comun (90% de caer)
+        this->probabilidadDrop = 90;
+    }
+    else if (curacion <= 15) {
+        // Vendas (Medias) -> Raro (50% de caer)
+        this->probabilidadDrop = 50;
+    }
+    else {
+        // Pocima de Curacion (Fuerte) -> Epico (20% de caer)
+        this->probabilidadDrop = 20;
+    }
 }
+
 
 void Curativo::usar(Entidad* objetivo) {
     // 1. Intentar convertir la referencia de Entidad a Heroe

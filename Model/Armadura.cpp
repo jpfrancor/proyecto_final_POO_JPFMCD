@@ -6,10 +6,14 @@
 #include "Heroe.h"
 #include <iostream>
 
-// El constructor debe coincidir
+//consructor
 Armadura::Armadura(std::string nombre, std::string descripcion, int defensa)
-    : Item(nombre, descripcion, false) { // Pasamos la descripcion al padre
+    : Item(nombre, descripcion, false) {
     this->defensaExtra = defensa;
+
+    // Probabilidad
+    if (defensa == 3) this->probabilidadDrop = 60;     // Pechera
+    else if (defensa == 7) this->probabilidadDrop = 15; // Armadura del heroe
 }
 
 void Armadura::usar(Entidad* usuario) {
