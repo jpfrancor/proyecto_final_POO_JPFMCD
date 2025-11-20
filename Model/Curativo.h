@@ -21,6 +21,11 @@ public:
 
 
     void usar(Entidad* objetivo) override;
+
+    // Getters
+    int getValorCuracion() const;
 };
+
+
 
 #endif //PROYECTO_FINAL_POO_JPFMCD_CURATIVO_H

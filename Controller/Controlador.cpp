@@ -7,6 +7,7 @@
 #include <algorithm> // para transform
 #include <cctype>    // para tolower
 
+
 Controlador::Controlador() : heroe(nullptr), habitacionActual(nullptr), habitacionAnterior(nullptr), juegoTerminado(false) {}
 
 Controlador::~Controlador() {
@@ -22,6 +23,11 @@ void Controlador::inicializarMapa() {
     Habitacion* pasillo = new Habitacion("Pasillo Principal", "Entras al calabozo, dispuesto a salvar a tu hija. Tus ojos se adaptan a la poca luz, solo algunas antorchas iluminan tu camino.\nEl pasillo se extiende hacia la oscuridad, no ves su final, pero escuchas el traqueteo de...huesos?", 1);
     Habitacion* armeria = new Habitacion("Armeria Abandonada", "Estantes rotos y armas oxidadas.", 2);
     Habitacion* salaTrono = new Habitacion("Sala del Trono", "El aire es pesado aqui. El Jefe espera.", 3);
+    mapaGlobal.clear();
+    mapaGlobal.push_back(entrada);
+    mapaGlobal.push_back(pasillo);
+    mapaGlobal.push_back(armeria);
+    mapaGlobal.push_back(salaTrono);
 
     // Conexiones entre Habitaciones
     entrada->agregarSalida("Norte", pasillo);
@@ -54,7 +60,27 @@ void Controlador::inicializarMapa() {
 
 void Controlador::iniciar() {
     vista.mostrarBienvenida();
+    // PREGUNTA DE CARGA
+    vista.mostrarMensaje("1. Nueva Partida");
+    vista.mostrarMensaje("2. Cargar Partida");
+    int op = vista.pedirOpcion();
+
+    inicializarMapa(); // Primero creamos el mundo
+
+    if (op == 2) {
+        cargarPartida();
+        // Si la carga falló (no había archivo), creamos un héroe por defecto
+        if (heroe == nullptr) {
+            std::string nombre = vista.pedirString();
+            heroe = new Heroe(nombre, "Aventurero", 100, 10, 5);
+        }
+    } else {
+        // Nueva Partida normal
+        std::string nombre = vista.pedirString();
+        heroe = new Heroe(nombre, "Aventurero", 100, 10, 5);
+    }
     std::string nombre = vista.pedirString();
+
 
     // Crear Héroe (Nombre, Desc, HP, Atk, Def)
     heroe = new Heroe(nombre, "Un valiente aventurero, en busca de su hija perdida en la oscuridad.", 100, 10, 1);
@@ -273,8 +299,154 @@ void Controlador::procesarInventario() {
     }
 }
 
-void Controlador::guardarPartida() {
-    vista.mostrarMensaje("Guardando partida... (Simulacion)");
-    // Aquí usarías <fstream> para escribir heroe->getNombre(), nivel, hp, etc. en un .txt
+
+
+    void Controlador::guardarPartida() {
+    std::ofstream archivo("savegame.txt");
+
+    if (archivo.is_open()) {
+        // 1. Datos del Héroe (Igual que antes)
+        archivo << heroe->getNombre() << std::endl;
+        archivo << heroe->getNivel() << std::endl;
+        archivo << heroe->getExperiencia() << std::endl;
+        archivo << heroe->getPuntosDeVida() << std::endl;
+        archivo << heroe->getPuntosDeVidaMax() << std::endl;
+        archivo << heroe->getAtaque() << std::endl;
+        archivo << heroe->getDefensa() << std::endl;
+
+        // 2. Ubicación
+        archivo << habitacionActual->getNombre() << std::endl;
+
+        // === 3. NUEVO: GUARDAR INVENTARIO ===
+        // Escribimos cuántos items tenemos para saber cuántos leer luego
+        archivo << heroe->getInventario().size() << std::endl;
+
+        for (Item* item : heroe->getInventario()) {
+            // TIPO 1: Curativo | TIPO 2: Arma | TIPO 3: Armadura
+
+            if (dynamic_cast<Curativo*>(item)) {
+                archivo << 1 << std::endl; // Tipo
+                archivo << item->getNombre() << std::endl; // Nombre completo
+                archivo << item->getDescripcion() << std::endl; // Descripción original
+                // Recuperamos el valor. Como item genérico no tiene getValorCuracion,
+                // hacemos un cast temporal seguro:
+                archivo << ((Curativo*)item)->getValorCuracion() << std::endl;
+            }
+            else if (dynamic_cast<Arma*>(item)) {
+                archivo << 2 << std::endl;
+                archivo << item->getNombre() << std::endl;
+                archivo << item->getDescripcion() << std::endl;
+                archivo << ((Arma*)item)->getPuntosAtaque() << std::endl;
+            }
+            else if (dynamic_cast<Armadura*>(item)) {
+                archivo << 3 << std::endl;
+                archivo << item->getNombre() << std::endl;
+                archivo << item->getDescripcion() << std::endl;
+                archivo << ((Armadura*)item)->getDefensaExtra() << std::endl;
+            }
+        }
+
+        archivo.close();
+        vista.mostrarMensaje(">>> Partida y Equipo guardados. <<<");
+    } else {
+        vista.mostrarMensaje("Error al guardar.");
+    }
 }
+    void Controlador::cargarPartida(){
+
+    std::ifstream archivo("savegame.txt");
+
+    if (archivo.is_open()) {
+        std::string nombre, nombreHabitacion;
+        int nivel, exp, hp, hpMax, atk, def;
+
+        // LEEMOS EN EL MISMO ORDEN QUE GUARDAMOS
+        // Nota: getline es mejor para textos con espacios, pero '>>' funciona para palabras simples.
+
+        // Lectura segura para evitar errores de buffer:
+        std::getline(archivo, nombre); // Nombre Héroe
+        archivo >> nivel;
+        archivo >> exp;
+        archivo >> hp;
+        archivo >> hpMax;
+        archivo >> atk;
+        archivo >> def;
+
+        // Limpiamos el salto de línea antes de leer el nombre de la habitación
+        archivo.ignore();
+        std::getline(archivo, nombreHabitacion);
+
+        // 1. Reconstruir al Héroe
+        // Si ya existe uno, lo borramos para no tener fugas de memoria
+        if (heroe != nullptr) delete heroe;
+
+        // Creamos uno nuevo con los stats cargados
+        heroe = new Heroe(nombre, "Heroe Cargado", hpMax, atk, def);
+        heroe->setNivel(nivel);
+        heroe->setExperiencia(exp);
+        heroe->setPuntosDeVida(hp); // Restauramos la vida actual (puede estar herido)
+
+        // 2. Restaurar Ubicación
+        bool encontrada = false;
+        for (Habitacion* hab : mapaGlobal) {
+            if (hab->getNombre() == nombreHabitacion) {
+                habitacionActual = hab;
+                encontrada = true;
+                break;
+            }
+        }
+        int cantidadItems;
+        archivo >> cantidadItems; // Leemos cuántos objetos había
+        archivo.ignore();
+
+        for (int i = 0; i < cantidadItems; i++) {
+            int tipo;
+            std::string nombreItem;
+            std::string descItem;
+            int valor;
+
+            archivo >> tipo >> nombreItem >> valor; // Leemos: 2 Espada 15
+            archivo.ignore();
+
+            std::getline(archivo, nombreItem);
+            std::getline(archivo, descItem);
+
+            archivo >> valor;
+            archivo.ignore();
+
+            Item* nuevoItem = nullptr;
+
+            if (tipo == 1) {
+                // Constructor(Nombre, Descripcion, Curacion)
+                nuevoItem = new Curativo(nombreItem, descItem, valor);
+            }
+            else if (tipo == 2) {
+                // Constructor(Nombre, Descripcion, Daño)
+                nuevoItem = new Arma(nombreItem, descItem, valor);
+            }
+            else if (tipo == 3) {
+                // Constructor(Nombre, Descripcion, Defensa)
+                nuevoItem = new Armadura(nombreItem, descItem, valor);
+            }
+
+            if (nuevoItem != nullptr) {
+                heroe->agregarItemInventario(nuevoItem);
+            }
+
+        }
+        if (!encontrada) {
+            vista.mostrarMensaje("Advertencia: No se encontro la habitacion guardada. Iniciando en la primera.");
+            habitacionActual = mapaGlobal[0]; // Fallback de seguridad
+        }
+
+        archivo.close();
+        vista.mostrarMensaje(">>> Partida cargada correctamente. ¡Bienvenido de nuevo, " + nombre + "! <<<");
+    } else {
+        vista.mostrarMensaje("No existe ningun archivo de guardado anterior.");
+    }
+}
+
+
+
+
 

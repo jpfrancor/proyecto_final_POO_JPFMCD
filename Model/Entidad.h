@@ -56,6 +56,12 @@ public:
     int getDefensa() const;
     int getPuntosDeVidaMax() const;
     const std::vector<Item*>& getInventario() const;
+
+    // Setters
+    void setPuntosDeVida(int valor) { puntosDeVida = valor; }
+    void setPuntosDeVidaMax(int valor) { puntosDeVidaMax = valor; }
+    void setAtaque(int valor) { ataque = valor; }
+    void setDefensa(int valor) { defensa = valor; }
 };
 
 #endif //PROYECTOFINALPOO_ENTIDAD_H
