@@ -13,7 +13,7 @@ Jefe::Jefe(std::string nombre, std::string descripcion, int hp, int atk, int def
     // Llama al constructor de la clase base, inicializando los atributos
     : Entidad(nombre, descripcion, hp, atk, def)
 {
-    std::cout << "El Jefe Final " << this->nombre << " ha sido invocado." << std::endl;
+   //Vacio por ahora
 }
 
 // ======================= MÉTODOS DE ATAQUE SOBRESCRITOS =========================

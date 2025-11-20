@@ -14,7 +14,7 @@
 Esqueleto::Esqueleto(std::string nombre, std::string descripcion, int pv, int atk, int def)
     : Entidad(std::move(nombre), std::move(descripcion), pv, atk, def)
 {
-    std::cout << "Un Esqueleto se levanta: " << this->nombre << "." << std::endl;
+    //Vacio por ahora para que no salga mensaje de invocacion
 
 
     // Items básicos y curativos

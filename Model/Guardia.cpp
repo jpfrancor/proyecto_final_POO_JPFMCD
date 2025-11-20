@@ -13,7 +13,7 @@
 Guardia::Guardia(std::string nombre, std::string descripcion, int pv, int atk, int def)
     : Entidad(std::move(nombre), std::move(descripcion), pv, atk, def)
 {
-    std::cout << "Un Guardia hostil ha aparecido: " << this->nombre << "." << std::endl;
+    //No le ponemos comentario de invocacion
 
     // 2. Inventario del Guardia
 

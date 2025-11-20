@@ -16,8 +16,7 @@ Entidad::Entidad(std::string nombre, std::string descripcion, int hp, int atk, i
       puntosDeVida(hp),
       puntosDeVidaMax(hp),
       ataque(atk),
-      defensa(def) {
-    std::cout << "Enhorabuena! " << this->nombre << " ha aparecido." << std::endl;
+      defensa(def) {//Vacio para que no imprima nada
 }
 
 // Implementación del metodo morir.
