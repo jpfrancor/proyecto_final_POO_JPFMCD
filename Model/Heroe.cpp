@@ -53,7 +53,7 @@ void Heroe::subirDeNivel() {
 
 void Heroe::movimiento1(Entidad& objetivo) {
     std::cout << this->nombre << " realiza un Ataque Básico a " << objetivo.getNombre() << "." << std::endl;
-    // Aquí deberías llamar a: objetivo.recibirDanio(this->ataque); cuando lo implementes
+    objetivo.recibirDanio(this->ataque);
 }
 
 // ======================= LÓGICA DE CURACION =========================

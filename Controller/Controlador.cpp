@@ -55,7 +55,7 @@ void Controlador::iniciar() {
     std::string nombre = vista.pedirString();
 
     // Crear Héroe (Nombre, Desc, HP, Atk, Def)
-    heroe = new Heroe(nombre, "Un valiente aventurero", 100, 10, 5);
+    heroe = new Heroe(nombre, "Un valiente aventurero, en busca de su hija perdida en la oscuridad.", 100, 10, 5);
 
     inicializarMapa();
 
@@ -64,10 +64,10 @@ void Controlador::iniciar() {
         vista.mostrarHUD(heroe);
         vista.mostrarLugar(habitacionActual);
 
-        // Si hay enemigos, entramos en combate OBLIGATORIO (o das opción a huir)
+        // Si hay enemigos, entramos en combate OBLIGATORIO
         if (!habitacionActual->estaDespejada()) {
             procesarCombate();
-            if (heroe->getPuntosDeVida() <= 0) break; // Game Over
+            if (heroe->getPuntosDeVida() <= 0) break; // GAMEOVERRRR se acaba
         }
 
         // Si no hay enemigos (o ya murieron), mostramos menú de exploración
