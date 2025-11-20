@@ -61,9 +61,10 @@ void Controlador::inicializarMapa() {
 void Controlador::iniciar() {
     vista.mostrarBienvenida();
     // PREGUNTA DE CARGA
-    vista.mostrarMensaje("1. Nueva Partida");
+    vista.mostrarMensaje("\n1. Nueva Partida");
     vista.mostrarMensaje("2. Cargar Partida");
     int op = vista.pedirOpcion();
+    std::cin.ignore();
 
     inicializarMapa(); // Primero creamos el mundo
 
@@ -71,22 +72,25 @@ void Controlador::iniciar() {
         cargarPartida();
         // Si la carga falló (no había archivo), creamos un héroe por defecto
         if (heroe == nullptr) {
+            vista.mostrarMensaje("No se encontro partida guardada. Iniciando una nueva.");
+
+            vista.mostrarMensaje("Ingresa el nombre de tu Heroe: ");
             std::string nombre;
             std::getline(std::cin, nombre);
+
+            if (nombre.empty()) nombre = "Aventurero"; // Nombre por defecto si da Enter vacío
             heroe = new Heroe(nombre, "Un valiente aventurero, en busca de su hija perdida en la oscuridad.", 100, 10, 1);
         }
     } else {
         // Nueva Partida normal
+        vista.mostrarMensaje("Ingresa el nombre de tu Heroe: ");
+
         std::string nombre;
-        std::getline(std::cin, nombre);
+        std::getline(std::cin, nombre); // Leemos el nombre con espacios
+
+        if (nombre.empty()) nombre = "Aventurero"; // Protección contra nombre vacío
         heroe = new Heroe(nombre, "Un valiente aventurero, en busca de su hija perdida en la oscuridad.", 100, 10, 1);
     }
-    std::string nombre = vista.pedirString();
-
-
-    // Crear Héroe (Nombre, Desc, HP, Atk, Def)
-
-    inicializarMapa();
 
     // Bucle Principal
     while (!juegoTerminado && heroe->getPuntosDeVida() > 0) {
@@ -102,6 +106,7 @@ void Controlador::iniciar() {
         // Si no hay enemigos (o ya murieron), mostramos menú de exploración
         vista.mostrarMenuAcciones();
         int opcion = vista.pedirOpcion();
+        std::cin.ignore(); //Para limpiar buffer
 
         switch (opcion) {
             case 1: procesarMovimiento(); break;
@@ -163,12 +168,21 @@ void Controlador::procesarCombate() {
                     // No hay return para que se pierda turno y recibir daño
                 } else {
                     // EXITO DE ESCAPE
-                    vista.mostrarMensaje("¡Logras evitar los golpes y sales ileso. Escapaste a " + habitacionAnterior->getNombre());
-                    if (habitacionAnterior != nullptr) {
+                    if (habitacionAnterior == nullptr) {
+                        // NO HAY SALIDA
+                        vista.mostrarMensaje("¡Logras esquivar, pero la salida está bloqueada! No hay a dónde correr.");
+                        // NO ponemos 'return' para que el combate siga
+                        // Al no salir, el código sigue bajando y el enemigo te atacará.
+                    }
+                    else {
+                        // SI HAY SALIDA
                         habitacionActual = habitacionAnterior;
+                        vista.mostrarMensaje("¡Logras evitar los golpes y sales ileso. Escapaste a " + habitacionActual->getNombre());
+                        vista.mostrarHUD(heroe);
+                        return;
+
                     }
                     vista.mostrarHUD(heroe);
-                    return; //El return nos saca de la funcion para que volvamos a la habitacion sin combate.
                 }
             }
         }
@@ -320,7 +334,7 @@ void Controlador::procesarInventario() {
         archivo << habitacionActual->getNombre() << std::endl;
 
         // Guardado de inventario
-        // Escribimos cuántos items tenemos para saber cuántos leer luego
+        // Escribimos cuántos items tenemos para saber cuántos debe leer luego
         archivo << heroe->getInventario().size() << std::endl;
 
         for (Item* item : heroe->getInventario()) {
@@ -364,9 +378,6 @@ void Controlador::procesarInventario() {
         std::string nombreHabitacion;
         int nivel, exp, hp, hpMax, atk, def;
 
-        // LEEMOS EN EL MISMO ORDEN QUE GUARDAMOS
-        // Nota: getline es mejor para textos con espacios, pero '>>' funciona para palabras simples.
-
         // Lectura segura para evitar errores de buffer:
         std::getline(archivo, nombreGuardado); // Nombre Héroe
         std::getline(archivo, descripcionGuardada);
@@ -377,21 +388,27 @@ void Controlador::procesarInventario() {
         archivo >> atk;
         archivo >> def;
 
-        // Limpiamos el salto de línea antes de leer el nombre de la habitación
-        archivo.ignore();
+        //UBICACIÓN
+        // Después de leer 'def' (int), queda un \n en el buffer.
+        // Si no lo borramos, el getline de la habitación lee vacío.
+        archivo.ignore(1000, '\n');
         std::getline(archivo, nombreHabitacion);
+        if (!nombreHabitacion.empty() && nombreHabitacion.back() == '\r') {
+            nombreHabitacion.pop_back();
+        }
+        std::cout << "DEBUG - Defensa leida: " << def << std::endl;
+        std::cout << "DEBUG - Habitacion leida: [" << nombreHabitacion << "]" << std::endl;
 
-        // 1. Reconstruir al Héroe
-        // Si ya existe uno, lo borramos para no tener fugas de memoria
+
+
+        // Reconstruir Héroe
         if (heroe != nullptr) delete heroe;
-
-        // Creamos uno nuevo con los stats cargados
         heroe = new Heroe(nombreGuardado, descripcionGuardada, hpMax, atk, def);
         heroe->setNivel(nivel);
         heroe->setExperiencia(exp);
-        heroe->setPuntosDeVida(hp); // Restauramos la vida actual (puede estar herido)
+        heroe->setPuntosDeVida(hp);
 
-        // 2. Restaurar Ubicación
+        // Restaurar Ubicación
         bool encontrada = false;
         for (Habitacion* hab : mapaGlobal) {
             if (hab->getNombre() == nombreHabitacion) {
@@ -400,8 +417,18 @@ void Controlador::procesarInventario() {
                 break;
             }
         }
+
+        if (!encontrada) {
+            // Fallback de seguridad
+            habitacionActual = mapaGlobal[0];
+        }
+
+        // 2. LEER INVENTARIO
         int cantidadItems;
-        archivo >> cantidadItems; // Leemos cuántos objetos había
+        archivo >> cantidadItems;
+
+        // === CORRECCIÓN 2: INVENTARIO ===
+        // Después de leer la cantidad, limpiar el buffer antes de leer nombres de items
         archivo.ignore();
 
         for (int i = 0; i < cantidadItems; i++) {
@@ -410,43 +437,35 @@ void Controlador::procesarInventario() {
             std::string descItem;
             int valor;
 
-            archivo >> tipo >> nombreItem >> valor; // Leemos: 2 Espada 15
+            // A. Leer TIPO
+            archivo >> tipo;
+
+            // === CORRECCIÓN 3: DENTRO DEL BUCLE ===
+            // Después del número 'tipo', limpiar para leer 'nombreItem'
             archivo.ignore();
 
+            // B. Leer TEXTOS
             std::getline(archivo, nombreItem);
             std::getline(archivo, descItem);
 
+            // C. Leer VALOR
             archivo >> valor;
-            archivo.ignore();
+            // (Opcional) Limpiar si hubiera más cosas, pero el >> del siguiente 'tipo' se salta los espacios.
 
+            // D. Crear Objeto
             Item* nuevoItem = nullptr;
-
-            if (tipo == 1) {
-                // Constructor(Nombre, Descripcion, Curacion)
-                nuevoItem = new Curativo(nombreItem, descItem, valor);
-            }
-            else if (tipo == 2) {
-                // Constructor(Nombre, Descripcion, Daño)
-                nuevoItem = new Arma(nombreItem, descItem, valor);
-            }
-            else if (tipo == 3) {
-                // Constructor(Nombre, Descripcion, Defensa)
-                nuevoItem = new Armadura(nombreItem, descItem, valor);
-            }
+            if (tipo == 1) nuevoItem = new Curativo(nombreItem, descItem, valor);
+            else if (tipo == 2) nuevoItem = new Arma(nombreItem, descItem, valor);
+            else if (tipo == 3) nuevoItem = new Armadura(nombreItem, descItem, valor);
 
             if (nuevoItem != nullptr) {
                 heroe->agregarItemInventario(nuevoItem);
             }
-
-        }
-        if (!encontrada) {
-            vista.mostrarMensaje("Advertencia: No se encontro la habitacion guardada. Iniciando en la primera.");
-            habitacionActual = mapaGlobal[0]; // Fallback de seguridad
         }
 
         archivo.close();
         vista.mostrarMensaje(">>> Partida cargada correctamente. ¡Bienvenido de nuevo, " + nombreGuardado + "! <<<");
     } else {
-        vista.mostrarMensaje("No existe ningun archivo de guardado anterior.");
+        vista.mostrarMensaje("No existe ningun archivo de guardado.");
     }
 }

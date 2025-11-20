@@ -58,7 +58,6 @@ void Vista::mostrarBienvenida() {
     cout << "==================================================================" << endl;
     cout << "              BIENVENIDO A LA OSCURIDAD, AVENTURERO" << endl;
     cout << "==================================================================" << endl;
-    cout << "Ingresa el nombre de tu Heroe:  ";
 }
 
 void Vista::mostrarLugar(Habitacion* habitacion) {
