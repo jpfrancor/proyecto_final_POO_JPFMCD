@@ -56,7 +56,7 @@ void Vista::mostrarBienvenida() {
     )" << endl; //El R de arriba significa raw string y hace que se lea el arte sin modificaciones raras
 
     cout << "==================================================================" << endl;
-    cout << "                    BIENVENIDO, AVENTURERO" << endl;
+    cout << "              BIENVENIDO A LA OSCURIDAD, AVENTURERO" << endl;
     cout << "==================================================================" << endl;
     cout << "Ingresa el nombre de tu Heroe: ";
 }
