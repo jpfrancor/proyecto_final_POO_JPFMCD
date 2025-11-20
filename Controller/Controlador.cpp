@@ -4,6 +4,8 @@
 
 #include "Controlador.h"
 #include <iostream>
+#include <algorithm> // para transform
+#include <cctype>    // para tolower
 
 Controlador::Controlador() : heroe(nullptr), habitacionActual(nullptr), juegoTerminado(false) {}
 
@@ -137,16 +139,33 @@ void Controlador::procesarCombate() {
     }
 }
 
-void Controlador::procesarMovimiento() {
-    vista.mostrarMensaje("¿Hacia donde? (Escribe: Norte, Sur, Este, Oeste): ");
-    std::string dir = vista.pedirString();
+// Para convertir a minúsculas (las funciones auxiliares deben ponerse arriba de la funcion grande q las usa)
+std::string aMinusculas(std::string texto) {
+    std::transform(texto.begin(), texto.end(), texto.begin(),
+                   [](unsigned char c){ return std::tolower(c); });
+    return texto;
+}
 
-    Habitacion* destino = habitacionActual->getSalida(dir);
+void Controlador::procesarMovimiento() {
+    vista.mostrarMensaje("¿Hacia donde? (Norte, Sur, Este, Oeste): ");
+    std::string entradaUsuario = vista.pedirString();
+
+    //Aqui se convierte a minusculas con la funcion de justo arribita
+    std::string direccion = aMinusculas(entradaUsuario);
+
+    // Solo dejamos la primera letra mayuscula para que cuadre con lo de movimiento
+    if (!direccion.empty()) {
+        direccion[0] = std::toupper(direccion[0]);
+    }
+
+    // Se usa la salida formateada
+    Habitacion* destino = habitacionActual->getSalida(direccion);
+
     if (destino != nullptr) {
         habitacionActual = destino;
-        vista.mostrarMensaje("Te mueves hacia el " + dir);
+        vista.mostrarMensaje("Te mueves hacia el " + direccion);
     } else {
-        vista.mostrarMensaje("No hay salida en esa dirección.");
+        vista.mostrarMensaje("No hay salida hacia el " + direccion);
     }
 }
 
@@ -234,3 +253,4 @@ void Controlador::guardarPartida() {
     vista.mostrarMensaje("Guardando partida... (Simulacion)");
     // Aquí usarías <fstream> para escribir heroe->getNombre(), nivel, hp, etc. en un .txt
 }
+
