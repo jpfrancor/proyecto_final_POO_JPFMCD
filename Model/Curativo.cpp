@@ -6,7 +6,10 @@
 #include "Heroe.h" // ¡Ahora incluimos Heroe.h!
 #include <iostream>
 
-// ... (Constructor)
+Curativo::Curativo(std::string nombre, std::string descripcion, int curacion)
+    : Item(nombre, descripcion, true) { // true porque es consumible
+    this->valorCuracion = curacion;
+}
 
 void Curativo::usar(Entidad* objetivo) {
     // 1. Intentar convertir la referencia de Entidad a Heroe
