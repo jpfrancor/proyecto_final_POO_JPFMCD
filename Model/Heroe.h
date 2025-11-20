@@ -47,6 +47,10 @@ public:
     // --- GETTERS ---
     int getNivel() const;
     int getExperiencia() const;
+
+    // --- SETTERS ---
+    void setNivel(int valor) { nivel = valor; }
+    void setExperiencia(int valor) { experiencia = valor; }
 };
 
 #endif // PROYECTO_FINAL_POO_JPFMCD_HEROE_H
