@@ -18,12 +18,12 @@ Esqueleto::Esqueleto(std::string nombre, std::string descripcion, int pv, int at
 
 
     // Items básicos y curativos
-    this->inventario.push_back(new Curativo("Hierbas", "Curacion baja. +5HP.", 5));
-    this->inventario.push_back(new Curativo("Vendas", "Curacion media. +10HP.", 10));
+    this->inventario.push_back(new Curativo("Hierbas", "Curacion baja. +10HP.", 10));
+    this->inventario.push_back(new Curativo("Vendas", "Curacion media. +25HP.", 25));
 
 
-    this->inventario.push_back(new Arma("Lanza", "Una lanza de caballeria, ideal para atravesar enemigos que se acercan demasiado. +5HP.", 5));
-    this->inventario.push_back(new Armadura("Pechera", "Ofrece mas resistencia, enhorabuena. +5HP.", 3));
+    this->inventario.push_back(new Arma("Lanza", "Una lanza de caballeria, ideal para atravesar enemigos que se acercan demasiado. +7ATK.", 7));
+    this->inventario.push_back(new Armadura("Pechera", "Ofrece mas resistencia, enhorabuena. +7DEF.", 7));
 }
 
 // ======================= MÉTODOS PÚROS =========================

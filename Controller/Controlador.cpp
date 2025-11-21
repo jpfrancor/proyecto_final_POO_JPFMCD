@@ -31,48 +31,104 @@ void Controlador::inicializarMapa() {
     Habitacion* pasillo = new Habitacion("Pasillo Principal", "Entras al calabozo, dispuesto a salvar a tu hija. Tus ojos se adaptan a la poca luz, solo algunas antorchas iluminan tu camino.\nEl pasillo se extiende hacia la oscuridad, no ves su final, pero escuchas el traqueteo de...huesos?", 1);
     Habitacion* armeria = new Habitacion("Armeria Abandonada", "Entre estantes rotos y armas oxidadas entras a una antigua armeria. \nNo hay mucho que ver, salvo una pequenna vitrina con lo que parece ser una lanza. \nEspera, algo grande se mueve...", 2);
     Habitacion* celda = new Habitacion("Celda Decrepita", "Si hay guardias, hay prisioneros, y este sitio lo demuestra. Filas y filas de rejas esconden los restos \nde aventureros menos afortunados...pero algunos no estan del todo muertos.",2);
+    Habitacion* cementerio = new Habitacion("Cementerio", "Al parecer hay mas muertos aqui de lo que pensabas. Sales del pasillo a una crater boscoso al aire libre, rodeado por riscos que impiden tu escape, donde tumbas yacen a la luz de la luna. Ten cuidado con el ejercito de esqueletos!",3);
+    Habitacion* laberinto = new Habitacion("Laberinto Interminable", "Pasando el cementerio, el calabozo vuelve a apoderarse del lugar, cerrando el camino a una serie de pasillos interminables con enemigos que aun vagan, perdidos.",4);
+
+    Habitacion* salaMala1 = new Habitacion("Callejon sin Salida", "El laberinto no perdona, y te ha arrojado a una sala sin avance, pero repleta de enemigos sedientos de sangre.",5);
+    Habitacion* salaMala2 = new Habitacion("Punto sin Avance", "El laberinto no perdona, y te ha arrojado a una sala sin avance, pero repleta de enemigos sedientos de sangre.",5);
+
+    Habitacion* salaFinal = new Habitacion("Trono de la Engendra", "Pasando el cementerio, el calabozo vuelve a apoderarse del lugar, cerrando el camino a una serie de pasillos interminables con enemigos que aun vagan, perdidos.",5);
+
     Habitacion* salaTrono = new Habitacion("Sala del Trono", "El aire es pesado aqui. El Jefe espera.", 3);
     mapaGlobal.clear();
     mapaGlobal.push_back(entrada);
     mapaGlobal.push_back(pasillo);
     mapaGlobal.push_back(armeria);
-    mapaGlobal.push_back(salaTrono);
+    mapaGlobal.push_back(salaFinal);
     mapaGlobal.push_back(celda);
+    mapaGlobal.push_back(cementerio);
+    mapaGlobal.push_back(laberinto);
+    mapaGlobal.push_back(salaMala1);
+    mapaGlobal.push_back(salaMala2);
 
     // Conexiones entre Habitaciones
     entrada->agregarSalida("Norte", pasillo);
+
     pasillo->agregarSalida("Sur", entrada);
     pasillo->agregarSalida("Este", armeria);
-    pasillo->agregarSalida("Norte", salaTrono);
+    pasillo->agregarSalida("Norte", cementerio);
     pasillo->agregarSalida("Oeste", celda);
+
     celda->agregarSalida("Este", pasillo);
+
     armeria->agregarSalida("Oeste", pasillo);
-    salaTrono->agregarSalida("Sur", pasillo);
+
+    cementerio->agregarSalida("Sur", pasillo);
+    cementerio->agregarSalida("Norte", laberinto);
+
+    laberinto->agregarSalida("Sur", cementerio);
+    laberinto->agregarSalida("Este", salaMala1);
+    laberinto->agregarSalida("Norte", salaMala2);
+    laberinto->agregarSalida("Oeste", salaFinal);
+
+    salaMala1->agregarSalida("Oeste", laberinto);
+
+    salaMala2->agregarSalida("Sur", laberinto);
+
 
     //Agregamos Enemigos
     pasillo->agregarEnemigo(new Esqueleto("Esqueleto Errante", "Un monton de huesos vivientes.", 20, 5, 1));
+
     armeria->agregarEnemigo(new Guardia("Guardia Grotesco", "Un guardia que olvido su juramento.", 40, 15, 5));
+
     celda->agregarEnemigo(new Esqueleto("Esqueleto Aventurero", "Un aventurero del pasado.", 20, 5, 1));
     celda->agregarEnemigo(new Guardia("Guardia Enfurecido", "No debiste molestar a sus prisioneros.", 40, 15, 5));
-    salaTrono->agregarEnemigo(new Jefe("Chameni, Engendra del Calabozo", "Una entidad maligna hecha mujer, personificacion del calabozo.", 100, 20, 10));
+
+    cementerio->agregarEnemigo(new Esqueleto("Esqueleto (1/5)", "Se aproxima un ejercito.", 30, 10, 3));
+    cementerio->agregarEnemigo(new Esqueleto("Esqueleto (2/5)", "Se aproxima un ejercito.", 30, 10, 3));
+    cementerio->agregarEnemigo(new Esqueleto("Esqueleto (3/5)", "Se aproxima un ejercito.", 30, 10, 3));
+    cementerio->agregarEnemigo(new Esqueleto("Esqueleto (4/5)", "Se aproxima un ejercito.", 30, 10, 3));
+    cementerio->agregarEnemigo(new Esqueleto("Jefe Esqueleto (5/5)", "Se aproxima un ejercito.", 50, 20, 6));
+
+    salaMala1->agregarEnemigo(new Guardia("Guardia Gigante", "Dificil de esquivar.", 100, 70, 20));
+
+    salaMala2->agregarEnemigo(new Esqueleto("Esqueleto de Oro", "No se rompe el maldito.", 150, 50, 30));
+
+    salaFinal->agregarEnemigo(new Jefe("Chameni, Engendra del Calabozo", "Una entidad maligna hecha mujer, personificacion del calabozo.", 200, 85, 30));
 
     //Agregamos Interacciones
-    // Caja en la entrada
+    // Caja en la entrada y carta
     Item* hierbas1 = new Curativo("Hierbas", "Curacion baja. +5HP.", 5);
     entrada->agregarInteraccion(new LugarDeInteraccion("Caja", "Una caja de cargamento antigua, no se sabe quien la dejo ahi.", hierbas1, 0));
-
-    //Carta en la entrada
     entrada->agregarInteraccion(new LugarDeInteraccion("Papel", "Ves un pedazo de papel, al acercarte, descubres que en realidad es una hoja arrancada de un diario.\n'Los que entran aqui no salen iguales. Da la vuelta.'", nullptr, 0));
 
     //Letrero en el pasillo
     pasillo->agregarInteraccion(new LugarDeInteraccion("Letreros Grabados", "Dos letreros yacen en lo alto del pasillo, uno apuntando al Este y otro al Oeste.\nHacia el Este: Un dibujo de una espada.\nHacia el Oeste: Un dibujo de una puerta con barrotes.", nullptr, 0));
 
     // Vitrina en la armería
-    armeria->agregarInteraccion(new LugarDeInteraccion("Fuente Sagrada", "Agua brillante", nullptr, 50));
-
-    // Vitrina en la armería
     Item* lanzaArmeria = new Arma("Lanza","Una lanza de caballeria, ideal para atravesar enemigos que se acercan demasiado. +5ATK.",  5);
     armeria->agregarInteraccion(new LugarDeInteraccion("Expositor de Armas", "Vitrina rota, una vieja lanza yace dentro.", lanzaArmeria, 0));
+
+    // Curacion en el cementerio
+    cementerio->agregarInteraccion(new LugarDeInteraccion("Fuente Sagrada", "Un cenotafio imponente proyecta una sombra sobre el cementerio, sin embargo, en su base hay luz. \nTe acercas, y ves que es una fuente con agua cristalina. Al beber de ella, sientes como te rejuveneces. +80HP.", nullptr, 80));
+
+    //Cofre en el laberinto
+    Item* invocacionLab = new Curativo("Libro de Invocaciones", "Curacion extremadamente alta, guardalo bien. +100HP.", 100);
+    laberinto->agregarInteraccion(new LugarDeInteraccion("Cofre Antiguo", "Se ve que nadie ha tocado esto en anios, con dificultad, logras abrirlo, y adentro...algo brilla.", invocacionLab, 0));
+
+    //Funda en el laberinto
+    Item* espadaSupremaLab = new Arma("Espada Suprema", "Un arma que parece puesta a proposito para ti. Usala, es tu unica esperanza. +50ATK.", 50);
+    laberinto->agregarInteraccion(new LugarDeInteraccion("Funda de Espada", "Una esquina del laberinto te llama...algo poderoso te espera. Esta espada sera tu mejor esperanza.", espadaSupremaLab, 0));
+
+    //Soporte de armadura Laberinto
+    Item* armaduraSuprema = new Armadura("Armadura Suprema", "Una armadura que parece puesta a proposito para ti. Usala, es tu unica esperanza. +30DEF.", 30);
+    laberinto->agregarInteraccion(new LugarDeInteraccion("Soporte de Armadura", "Una armadura maciza cuelga de un soporte viejo. Quien la dejo ahi? No se sabe, pero ahora te protegera.", armaduraSuprema, 0));
+
+    // Curacion en salaMala1
+    salaMala1->agregarInteraccion(new LugarDeInteraccion("Pilar de Deseos", "Un altar a un dios desconocido. No eres religioso, pero rezar es tu unica opcion contra la locura. \nTe acercas, e invocas al dios antiguo. +150HP.", nullptr, 150));
+
+    // Curacion en salaMala2
+    salaMala2->agregarInteraccion(new LugarDeInteraccion("Pacto de Sangre", "Un pentagrama de sangre en el piso de la sala. Te asusta, pero estas dispuesto a hacer lo que sea para sobrevivir. \nTe acercas, y cortas tu mano con tu espada, dejando fluir sangre al circulo. La sala retumba, el circulo te acepta. +150HP.", nullptr, 150));
 
     // Definir inicio
     this->habitacionActual = entrada;

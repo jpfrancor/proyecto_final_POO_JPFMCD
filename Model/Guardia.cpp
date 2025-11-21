@@ -18,12 +18,12 @@ Guardia::Guardia(std::string nombre, std::string descripcion, int pv, int atk, i
     // 2. Inventario del Guardia
 
     // Items base
-    this->inventario.push_back(new Curativo("Vendas", "Curacion media. +10HP.", 10));
-    this->inventario.push_back(new Curativo("Pocion de Curacion", "Curacion alta, para las mayores batallas. +25HP.", 25));
+    this->inventario.push_back(new Curativo("Vendas", "Curacion media. +25HP.", 25));
+    this->inventario.push_back(new Curativo("Pocion de Curacion", "Curacion alta, para las mayores batallas. +50HP.", 50));
 
 
-    this->inventario.push_back(new Arma("Espada del Heroe", "Espada formidable disennada para los mayores guerreros. +15ATK.", 15));
-    this->inventario.push_back(new Armadura("Armadura del Heroe", "Armadura formidable disennada para los mayores guerreros. +7DEF.", 7));
+    this->inventario.push_back(new Arma("Espada del Heroe", "Espada formidable disennada para los mayores guerreros. +20ATK.", 20));
+    this->inventario.push_back(new Armadura("Armadura del Heroe", "Armadura formidable disennada para los mayores guerreros. +15DEF.", 15));
 }
 
 // ======================= MÉTODOS PÚROS  =========================
