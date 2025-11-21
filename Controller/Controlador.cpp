@@ -177,6 +177,9 @@ void Controlador::iniciar() {
         if (!habitacionActual->estaDespejada()) {
             procesarCombate();
             if (heroe->getPuntosDeVida() <= 0) break; // GAMEOVERRRR se acaba
+            if (juegoTerminado) {
+                break;
+            }
         }
 
         // Si no hay enemigos (o ya murieron), mostramos menú de exploración
@@ -206,11 +209,10 @@ void Controlador::iniciar() {
 void Controlador::procesarCombate() {
     vista.mostrarMensaje("\n!!! COMBATE INICIADO !!!");
 
-    // === NUEVO BUCLE EXTERNO (LA OLA DE ENEMIGOS) ===
     // Este bucle no te deja salir hasta que mates a TODOS o mueras/huyas
     while (!habitacionActual->estaDespejada() && heroe->getPuntosDeVida() > 0) { //EL punto de exclamacion es un not, invierte lo q le pedimos
 
-        // 1. Seleccionamos SIEMPRE al primer enemigo de la fila.
+        // Seleccionamos al primer enemigo de la fila.
         // Como al matar al anterior lo borramos del vector, el siguiente ocupa su lugar (índice 0).
         std::vector<Entidad*> listaEnemigos = habitacionActual->getEnemigos();
         Entidad* enemigo = listaEnemigos.front(); // .front() es igual a [0]
@@ -289,56 +291,50 @@ void Controlador::procesarCombate() {
                 std::cout << heroe->getNombre() << " se desploma, llorando." << std::endl;
                 vista.mostrarMensaje("\n N A D I E    N U N C A    S A L E    I G U A L   D E L    C A L A B O Z O");
 
-
-
-
-
-
-
-
-
                 juegoTerminado = true; // Esto rompe el bucle while principal
-                return; // Salimos del combate
+                if (juegoTerminado) {
+                    break;
+                }
+                }
+
+                heroe->ganarExperiencia(55);
             }
-
-            heroe->ganarExperiencia(55);
+        } //Aqui se acaba el bucle grandote
+        if (heroe->getPuntosDeVida() > 0) {
+            vista.mostrarMensaje("\nLa sala esta en silencio. Has vencido a todos.");
         }
-    } //Aqui se acaba el bucle grandote
-    if (heroe->getPuntosDeVida() > 0) {
-        vista.mostrarMensaje("\nLa sala esta en silencio. Has vencido a todos.");
-    }
-}
-
-// Para convertir a minúsculas (las funciones auxiliares deben ponerse arriba de la funcion grande q las usa)
-std::string aMinusculas(std::string texto) {
-    std::transform(texto.begin(), texto.end(), texto.begin(),
-                   [](unsigned char c){ return std::tolower(c); });
-    return texto;
-}
-
-void Controlador::procesarMovimiento() {
-    vista.mostrarMensaje("¿Hacia donde? (Norte, Sur, Este, Oeste): ");
-    std::string entradaUsuario = vista.pedirString();
-
-    //Aqui se convierte a minusculas con la funcion de justo arribita
-    std::string direccion = aMinusculas(entradaUsuario);
-
-    // Solo dejamos la primera letra mayuscula para que cuadre con lo de movimiento
-    if (!direccion.empty()) {
-        direccion[0] = std::toupper(direccion[0]);
     }
 
-    // Se usa la salida formateada
-    Habitacion* destino = habitacionActual->getSalida(direccion);
-
-    if (destino != nullptr) {
-        this->habitacionAnterior = this->habitacionActual; // Se guarda la habitacion anterior
-        this->habitacionActual = destino;
-        vista.mostrarMensaje("Te mueves hacia el " + direccion);
-    } else {
-        vista.mostrarMensaje("No hay salida hacia el " + direccion);
+    // Para convertir a minúsculas (las funciones auxiliares deben ponerse arriba de la funcion grande q las usa)
+    std::string aMinusculas(std::string texto) {
+        std::transform(texto.begin(), texto.end(), texto.begin(),
+                       [](unsigned char c){ return std::tolower(c); });
+        return texto;
     }
-}
+
+    void Controlador::procesarMovimiento() {
+        vista.mostrarMensaje("¿Hacia donde? (Norte, Sur, Este, Oeste): ");
+        std::string entradaUsuario = vista.pedirString();
+
+        //Aqui se convierte a minusculas con la funcion de justo arribita
+        std::string direccion = aMinusculas(entradaUsuario);
+
+        // Solo dejamos la primera letra mayuscula para que cuadre con lo de movimiento
+        if (!direccion.empty()) {
+            direccion[0] = std::toupper(direccion[0]);
+        }
+
+        // Se usa la salida formateada
+        Habitacion* destino = habitacionActual->getSalida(direccion);
+
+        if (destino != nullptr) {
+            this->habitacionAnterior = this->habitacionActual; // Se guarda la habitacion anterior
+            this->habitacionActual = destino;
+            vista.mostrarMensaje("Te mueves hacia el " + direccion);
+        } else {
+            vista.mostrarMensaje("No hay salida hacia el " + direccion);
+        }
+    }
 
 void Controlador::procesarInteraccion() {
     // 1. Obtenemos la lista de cosas en la habitación actual
