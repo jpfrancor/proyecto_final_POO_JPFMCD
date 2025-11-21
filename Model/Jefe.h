@@ -7,7 +7,6 @@
 
 #include "Entidad.h" // Hereda de la clase base
 #include <string>
-#include "Heroe.h"
 
 
 
@@ -18,11 +17,6 @@ public:
 
     // Sobrescritura obligatoria con el objetivo (Heroe&)
     void movimiento1(Entidad& objetivo) override;
-
-    // Aquí irían otros métodos específicos si fueran necesarios...
-
-    // NOTA: Si el Jefe Final tiene una lógica de muerte única, el destructor
-    // o el morir() deberían ser sobrescritos.
 };
 
 #endif //PROYECTOFINALPOO_JEFE_H

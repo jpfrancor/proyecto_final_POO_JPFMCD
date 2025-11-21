@@ -276,8 +276,26 @@ void Controlador::procesarCombate() {
             if (dynamic_cast<Jefe*>(enemigo) != nullptr) {
                 vista.mostrarMensaje("\n**************************************************");
                 vista.mostrarMensaje("   ¡VICTORIA! HAS LIBERADO EL CALABOZO DE ERELIS   ");
-                vista.mostrarMensaje("          Tu hija Carlotta corre a abrazarte.      ");
-                vista.mostrarMensaje("**************************************************");
+                vista.mostrarMensaje("\nChameni pierde vigor y cae al piso, desangrada. Su vida se le escapa. Alrederor, el calabozo se recupera, los guardias y esqueletos mueren, el sol sale. ");
+                std::cout << heroe->getNombre() << " saca su espada untada de sangre negra del cuerpo de la aterradora mujer." << std::endl;
+                vista.mostrarMensaje("El cuerpo de la mujer malvada se retuerce, como si algo intentara escapar. Sus unnas se tornan negras, su pelo se acorta...");
+                vista.mostrarMensaje("Su piel cambia, de arrugada y amarilla a...blanca y suave");
+                vista.mostrarMensaje("Su altura...se encoge.");
+                vista.mostrarMensaje("Ya no es un monstruo en cuerpo de mujer...Chameni es...");
+                vista.mostrarMensaje("\n 'Hija!' ");
+                std::cout << heroe->getNombre() << " corre a poner a Carlotta en sus piernas, sosteniendo su cabeza palida." << std::endl;
+                vista.mostrarMensaje("\n 'NO, NO, NO! QUEDATE CONMIGO, LOTTIE. POR FAVOR' ");
+                vista.mostrarMensaje("\n La luz abandona los ojos de Carlotta, y una sombra oscura escapa de su cuerpo, una entidad antigua...mas antigua que el calabozo. ");
+                std::cout << heroe->getNombre() << " se desploma, llorando." << std::endl;
+                vista.mostrarMensaje("\n N A D I E    N U N C A    S A L E    I G U A L   D E L    C A L A B O Z O");
+
+
+
+
+
+
+
+
 
                 juegoTerminado = true; // Esto rompe el bucle while principal
                 return; // Salimos del combate
