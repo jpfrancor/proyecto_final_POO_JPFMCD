@@ -15,21 +15,22 @@ void Vista::mostrarBienvenida() {
     cout << R"(
 
 
+
      ##### /
   ######  /
  /#   /  /
 /    /  /
     /  /
-   ## ##              /###     /###   ##   ####    ###  /###     /###         /##  ###  /###
-   ## ##             / ###  / / ###  / ##    ###  / ###/ #### / / ###  /     / ###  ###/ #### /
-   ## ##            /   ###/ /   ###/  ##     ###/   ##   ###/ /   ###/     /   ###  ##   ###/
-   ## ##           ##    ## ##         ##      ##    ##       ##    ##     ##    ### ##    ##
-   ## ##           ##    ## ##         ##      ##    ##       ##    ##     ########  ##    ##
-   #  ##           ##    ## ##         ##      ##    ##       ##    ##     #######   ##    ##
-      /            ##    ## ##         ##      ##    ##       ##    ##     ##        ##    ##
-  /##/           / ##    ## ###     /  ##      /#    ##       ##    /#     ####    / ##    ##
- /  ############/   ######   ######/    ######/ ##   ###       ####/ ##     ######/  ###   ###
-/     #########      ####     #####      #####   ##   ###       ###   ##     #####    ###   ###
+   ## ##              /###     /###   ##   ####    ###  /###     /###             /##  ###  /###
+   ## ##             / ###  / / ###  / ##    ###  / ###/ #### / / ###  /         / ###  ###/ #### /
+   ## ##            /   ###/ /   ###/  ##     ###/   ##   ###/ /   ###/         /   ###  ##   ###/
+   ## ##           ##    ## ##         ##      ##    ##       ##    ##         ##    ### ##    ##
+   ## ##           ##    ## ##         ##      ##    ##       ##    ##         ########  ##    ##
+   #  ##           ##    ## ##         ##      ##    ##       ##    ##         #######   ##    ##
+      /            ##    ## ##         ##      ##    ##       ##    ##         ##        ##    ##
+  /##/           / ##    ## ###     /  ##      /#    ##       ##    /#         ####    / ##    ##
+ /  ############/   ######   ######/    ######/ ##   ###       ####/ ##         ######/  ###   ###
+/     #########      ####     #####      #####   ##   ###       ###   ##         #####    ###   ###
 #
  ##
 
@@ -73,13 +74,24 @@ void Vista::mostrarLugar(Habitacion* habitacion) {
 
     // Mostrar enemigos
     if (!habitacion->estaDespejada()) {
-        cout << "¡PELIGRO! Enemigos presentes: ";
-        for (auto enemigo : habitacion->getEnemigos()) {
-            cout << enemigo->getNombre() << " ";
+        std::cout << "¡PELIGRO! Enemigos presentes: ";
+
+        // Invocamos la lista para poder contar cuántos enemigos hay
+        const std::vector<Entidad*>& lista = habitacion->getEnemigos();
+
+        for (size_t i = 0; i < lista.size(); ++i) {
+            // Imprimimos el nombre del enemigo actual
+            std::cout << lista[i]->getNombre();
+
+            //
+            // Si NO es el último de la lista, pone una coma y un espacio
+            if (i < lista.size() - 1) {
+                std::cout << ", ";
+            }
         }
-        cout << endl;
+        std::cout << endl;
     } else {
-        cout << "(Zona despejada)" << endl;
+        std::cout << "(Zona despejada)" << endl;
     }
 }
 

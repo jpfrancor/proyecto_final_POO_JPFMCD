@@ -17,34 +17,38 @@ LugarDeInteraccion::~LugarDeInteraccion() {
 }
 
 void LugarDeInteraccion::ejecutarInteraccion(Heroe& heroe) {
-  std::cout << "Interactuas con " << this->nombre << "..." << std::endl;
-  std::cout << this->descripcion << std::endl;
+  std::cout << "\nInteractuas con " << this->nombre << "..." << std::endl;
+  std::cout << this->descripcion << std::endl; // <--- AQUÍ SE MUESTRA EL MENSAJE DE LORE
 
-  // Si ya se usó el sitio
+  // Si ya se usó
   if (this->usado) {
-    std::cout << "Ya no queda nada util aqui." << std::endl;
-    return; // <--- IMPORTANTE: Salir aquí
+    std::cout << "(Ya has tomado todo lo util de aqui)" << std::endl;
+    return;
   }
 
-  // Si hay un Item
+  // Lógica si hay un Item
   if (this->itemOculto != nullptr) {
     std::cout << "¡Encontraste un objeto: " << itemOculto->getNombre() << "!" << std::endl;
     heroe.agregarItemInventario(itemOculto);
 
     this->itemOculto = nullptr;
-    this->usado = true;
-    return; // <--- AGREGA ESTO: Si encontró algo, termina la función YA.
+    this->usado = true; // Marcamos como usado para que no de items infinitos
+    return;
   }
 
-  // Si hay Curación
+  // Lógica si hay Curación
   if (this->puntosDeCuracion > 0) {
-    std::cout << "Sientes una energia revitalizante." << std::endl;
-    heroe.curarse(this->puntosDeCuracion);
-
-    this->usado = true;
-    return; // <--- AGREGA ESTO: Si curó, termina la función YA.
+    // Verificamos si vale la pena curarse
+    if (heroe.getPuntosDeVida() < heroe.getPuntosDeVidaMax()) {
+      std::cout << "Sientes una energia revitalizante." << std::endl;
+      heroe.curarse(this->puntosDeCuracion);
+      this->usado = true; // La fuente se agota
+    } else {
+      std::cout << "Te sientes lleno de energia, mejor guardar esto para luego." << std::endl;
+    }
+    return;
   }
 
-  // Esto solo aparece si no hay NADA mas en el lugar
-  std::cout << "Paila, al parecer no hay nada aqui." << std::endl;
+  // SI LLEGAMOS AQUÍ, ES UN LUGAR DE SOLO TEXTO
+  // No imprimimos nada.
 }

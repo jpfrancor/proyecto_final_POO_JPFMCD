@@ -11,48 +11,68 @@
 Controlador::Controlador() : heroe(nullptr), habitacionActual(nullptr), habitacionAnterior(nullptr), juegoTerminado(false) {}
 
 Controlador::~Controlador() {
-    delete heroe;
-    // Aquí deberías borrar recursivamente las habitaciones si no usas un gestor global
-    // Por simplicidad, asumimos que el SO limpia al terminar, pero idealmente
-    // deberías tener un vector<Habitacion*> todasLasHabitaciones para borrarlas.
+    if (heroe != nullptr) {
+        delete heroe;
+    }
+
+    // Borrar habitaciones para evitar fugas
+    // Como usamos mapaGlobal lo recorremos para borrarlas todas.
+    for (Habitacion* hab : mapaGlobal) {
+        delete hab;
+    }
+
+    // Limpiar el vector para que no queden punteros a la deriva
+    mapaGlobal.clear();
 }
 
 void Controlador::inicializarMapa() {
     // Habitaciones
     Habitacion* entrada = new Habitacion("Entrada del Calabozo", "Te aproximas al temido Calabozo de Erelis, una ciudad macabra con una historia violenta. \nVas en busca de tu hija de 5 anios, Carlotta, que desapareció hace tres semanas justo aquí, en el Calabozo.", 1);
     Habitacion* pasillo = new Habitacion("Pasillo Principal", "Entras al calabozo, dispuesto a salvar a tu hija. Tus ojos se adaptan a la poca luz, solo algunas antorchas iluminan tu camino.\nEl pasillo se extiende hacia la oscuridad, no ves su final, pero escuchas el traqueteo de...huesos?", 1);
-    Habitacion* armeria = new Habitacion("Armeria Abandonada", "Estantes rotos y armas oxidadas.", 2);
+    Habitacion* armeria = new Habitacion("Armeria Abandonada", "Entre estantes rotos y armas oxidadas entras a una antigua armeria. \nNo hay mucho que ver, salvo una pequenna vitrina con lo que parece ser una lanza. \nEspera, algo grande se mueve...", 2);
+    Habitacion* celda = new Habitacion("Celda Decrepita", "Si hay guardias, hay prisioneros, y este sitio lo demuestra. Filas y filas de rejas esconden los restos \nde aventureros menos afortunados...pero algunos no estan del todo muertos.",2);
     Habitacion* salaTrono = new Habitacion("Sala del Trono", "El aire es pesado aqui. El Jefe espera.", 3);
     mapaGlobal.clear();
     mapaGlobal.push_back(entrada);
     mapaGlobal.push_back(pasillo);
     mapaGlobal.push_back(armeria);
     mapaGlobal.push_back(salaTrono);
+    mapaGlobal.push_back(celda);
 
     // Conexiones entre Habitaciones
     entrada->agregarSalida("Norte", pasillo);
     pasillo->agregarSalida("Sur", entrada);
     pasillo->agregarSalida("Este", armeria);
     pasillo->agregarSalida("Norte", salaTrono);
+    pasillo->agregarSalida("Oeste", celda);
+    celda->agregarSalida("Este", pasillo);
     armeria->agregarSalida("Oeste", pasillo);
     salaTrono->agregarSalida("Sur", pasillo);
 
     //Agregamos Enemigos
     pasillo->agregarEnemigo(new Esqueleto("Esqueleto Errante", "Un monton de huesos vivientes.", 20, 5, 1));
-    armeria->agregarEnemigo(new Guardia("Guardia Corrupto", "Un guardia que olvido su juramento.", 40, 10, 3));
-    salaTrono->agregarEnemigo(new Jefe("Chameni", "El señor oscuro del calabozo.", 100, 20, 10));
+    armeria->agregarEnemigo(new Guardia("Guardia Grotesco", "Un guardia que olvido su juramento.", 40, 15, 5));
+    celda->agregarEnemigo(new Esqueleto("Esqueleto Aventurero", "Un aventurero del pasado.", 20, 5, 1));
+    celda->agregarEnemigo(new Guardia("Guardia Enfurecido", "No debiste molestar a sus prisioneros.", 40, 15, 5));
+    salaTrono->agregarEnemigo(new Jefe("Chameni, Engendra del Calabozo", "Una entidad maligna hecha mujer, personificacion del calabozo.", 100, 20, 10));
 
     //Agregamos Interacciones
-    // Cofre en la celda
+    // Caja en la entrada
     Item* hierbas1 = new Curativo("Hierbas", "Curacion baja. +5HP.", 5);
     entrada->agregarInteraccion(new LugarDeInteraccion("Caja", "Una caja de cargamento antigua, no se sabe quien la dejo ahi.", hierbas1, 0));
 
-    // Altar en la armería
+    //Carta en la entrada
+    entrada->agregarInteraccion(new LugarDeInteraccion("Papel", "Ves un pedazo de papel, al acercarte, descubres que en realidad es una hoja arrancada de un diario.\n'Los que entran aqui no salen iguales. Da la vuelta.'", nullptr, 0));
+
+    //Letrero en el pasillo
+    pasillo->agregarInteraccion(new LugarDeInteraccion("Letreros Grabados", "Dos letreros yacen en lo alto del pasillo, uno apuntando al Este y otro al Oeste.\nHacia el Este: Un dibujo de una espada.\nHacia el Oeste: Un dibujo de una puerta con barrotes.", nullptr, 0));
+
+    // Vitrina en la armería
     armeria->agregarInteraccion(new LugarDeInteraccion("Fuente Sagrada", "Agua brillante", nullptr, 50));
 
-    // Arma en la armería (Cofre)
-    Item* espada = new Arma("Espada del Heroe","Espada formidable disennada para los mayores guerreros. +15ATK.",  15);
-    armeria->agregarInteraccion(new LugarDeInteraccion("Expositor de Armas", "Vitrina rota", espada, 0));
+    // Vitrina en la armería
+    Item* lanzaArmeria = new Arma("Lanza","Una lanza de caballeria, ideal para atravesar enemigos que se acercan demasiado. +5ATK.",  5);
+    armeria->agregarInteraccion(new LugarDeInteraccion("Expositor de Armas", "Vitrina rota, una vieja lanza yace dentro.", lanzaArmeria, 0));
 
     // Definir inicio
     this->habitacionActual = entrada;
@@ -130,82 +150,88 @@ void Controlador::iniciar() {
 void Controlador::procesarCombate() {
     vista.mostrarMensaje("\n!!! COMBATE INICIADO !!!");
 
-    // Obtenemos el primer enemigo vivo
-    std::vector<Entidad*> enemigos = habitacionActual->getEnemigos();
-    if (enemigos.empty()) return;
+    // === NUEVO BUCLE EXTERNO (LA OLA DE ENEMIGOS) ===
+    // Este bucle no te deja salir hasta que mates a TODOS o mueras/huyas
+    while (!habitacionActual->estaDespejada() && heroe->getPuntosDeVida() > 0) { //EL punto de exclamacion es un not, invierte lo q le pedimos
 
-    Entidad* enemigo = enemigos[0];
+        // 1. Seleccionamos SIEMPRE al primer enemigo de la fila.
+        // Como al matar al anterior lo borramos del vector, el siguiente ocupa su lugar (índice 0).
+        std::vector<Entidad*> listaEnemigos = habitacionActual->getEnemigos();
+        Entidad* enemigo = listaEnemigos.front(); // .front() es igual a [0]
 
-    while (enemigo->getPuntosDeVida() > 0 && heroe->getPuntosDeVida() > 0) {
-        vista.mostrarHUD(heroe);
-        vista.mostrarMensaje("\nVS.: " + enemigo->getNombre() + " (HP: " + std::to_string(enemigo->getPuntosDeVida()) + ")");
-        vista.mostrarMenuCombate();
-        int op = vista.pedirOpcion();
+        while (enemigo->getPuntosDeVida() > 0 && heroe->getPuntosDeVida() > 0) {
+            vista.mostrarHUD(heroe);
+            vista.mostrarMensaje("\nVS.: " + enemigo->getNombre() + " (HP: " + std::to_string(enemigo->getPuntosDeVida()) + ")");
+            vista.mostrarMenuCombate();
+            int op = vista.pedirOpcion();
 
-        // Turno Jugador
-        if (op == 1) {
-            heroe->movimiento1(*enemigo); // Atacar
-        } else if (op == 2) {
-            procesarInventario(); // Usar item en combate
-        } else if (op == 3) {
-            // Antes de permitir escape, vemos si es el jefe final (que no escapen da mas susto)
-            // Usamos dynamic_cast para ver si el enemigo es de la clase Jefe
-            if (dynamic_cast<Jefe*>(enemigo) != nullptr) {
-                vista.mostrarMensaje("¡Es inútil! La oscuridad no permite marcha atras. No puedes huir de Chameni, la Engendra del Calabozo.");
-                // No hay return para que el jugador pierda el turno por cobarde!!!
-            }
-            else {
-                // Calculamos la probabilidad de que escape el jugador
-                int suerte = std::rand() % 100; // Genera 0 a 99
+            // Turno Jugador
+            if (op == 1) {
+                heroe->movimiento1(*enemigo); // Atacar
+            } else if (op == 2) {
+                procesarInventario(); // Usar item en combate
+            } else if (op == 3) {
+                // Antes de permitir escape, vemos si es el jefe final (que no escapen da mas susto)
+                // Usamos dynamic_cast para ver si el enemigo es de la clase Jefe
+                if (dynamic_cast<Jefe*>(enemigo) != nullptr) {
+                    vista.mostrarMensaje("¡Es inútil! La oscuridad no permite marcha atras. No puedes huir de Chameni, la Engendra del Calabozo.");
+                    // No hay return para que el jugador pierda el turno por cobarde!!!
+                }
+                else {
+                    // Calculamos la probabilidad de que escape el jugador
+                    int suerte = std::rand() % 100; // Genera 0 a 99
 
-                if (suerte < 50) {
-                    // FRACASO
-                    vista.mostrarMensaje("¡Intentaste correr pero te tropezaste! El enemigo aprovecha tu error.");
-                    // No hay return para que se pierda turno y recibir daño
-                } else {
-                    // EXITO DE ESCAPE
-                    if (habitacionAnterior == nullptr) {
-                        // NO HAY SALIDA
-                        vista.mostrarMensaje("¡Logras esquivar, pero la salida está bloqueada! No hay a dónde correr.");
-                        // NO ponemos 'return' para que el combate siga
-                        // Al no salir, el código sigue bajando y el enemigo te atacará.
-                    }
-                    else {
-                        // SI HAY SALIDA
-                        habitacionActual = habitacionAnterior;
-                        vista.mostrarMensaje("¡Logras evitar los golpes y sales ileso. Escapaste a " + habitacionActual->getNombre());
+                    if (suerte < 50) {
+                        // FRACASO
+                        vista.mostrarMensaje("¡Intentaste correr pero te tropezaste! El enemigo aprovecha tu error.");
+                        // No hay return para que se pierda turno y recibir daño
+                    } else {
+                        // EXITO DE ESCAPE
+                        if (habitacionAnterior == nullptr) {
+                            // NO HAY SALIDA
+                            vista.mostrarMensaje("¡Logras esquivar, pero la salida está bloqueada! No hay a dónde correr.");
+                            // NO ponemos 'return' para que el combate siga
+                            // Al no salir, el código sigue bajando y el enemigo te atacará.
+                        }
+                        else {
+                            // SI HAY SALIDA
+                            habitacionActual = habitacionAnterior;
+                            vista.mostrarMensaje("¡Logras evitar los golpes y sales ileso. Escapaste a " + habitacionActual->getNombre());
+                            vista.mostrarHUD(heroe);
+                            return;
+
+                        }
                         vista.mostrarHUD(heroe);
-                        return;
-
                     }
-                    vista.mostrarHUD(heroe);
                 }
             }
+
+            // Turno Enemigo (si sigue vivo)
+            if (enemigo->getPuntosDeVida() > 0) {
+                enemigo->movimiento1(*heroe);
+            }
         }
 
-        // Turno Enemigo (si sigue vivo)
-        if (enemigo->getPuntosDeVida() > 0) {
-            enemigo->movimiento1(*heroe);
+        if (enemigo->getPuntosDeVida() <= 0) {
+            vista.mostrarMensaje("¡Has derrotado a " + enemigo->getNombre() + "!");
+            enemigo->morir(*heroe); // Loot
+            habitacionActual->removerEnemigo(enemigo);
+            //Con dynamic_cast se revisa si el enemigo es jefe
+            if (dynamic_cast<Jefe*>(enemigo) != nullptr) {
+                vista.mostrarMensaje("\n**************************************************");
+                vista.mostrarMensaje("   ¡VICTORIA! HAS LIBERADO EL CALABOZO DE ERELIS   ");
+                vista.mostrarMensaje("          Tu hija Carlotta corre a abrazarte.      ");
+                vista.mostrarMensaje("**************************************************");
+
+                juegoTerminado = true; // Esto rompe el bucle while principal
+                return; // Salimos del combate
+            }
+
+            heroe->ganarExperiencia(50);
         }
-    }
-
-    if (enemigo->getPuntosDeVida() <= 0) {
-        vista.mostrarMensaje("¡Has derrotado a " + enemigo->getNombre() + "!");
-        enemigo->morir(*heroe); // Loot
-        habitacionActual->removerEnemigo(enemigo);
-        //Con dynamic_cast se revisa si el enemigo es jefe
-        if (dynamic_cast<Jefe*>(enemigo) != nullptr) {
-            vista.mostrarMensaje("\n**************************************************");
-            vista.mostrarMensaje("   ¡VICTORIA! HAS LIBERADO EL CALABOZO DE ERELIS   ");
-            vista.mostrarMensaje("          Tu hija Carlotta corre a abrazarte.      ");
-            vista.mostrarMensaje("**************************************************");
-
-            juegoTerminado = true; // Esto rompe el bucle while principal
-            return; // Salimos del combate
-        }
-
-        // Héroe gana experiencia (Faltaba implementar getters de experiencia en enemigo, inventamos valor)
-        heroe->ganarExperiencia(50);
+    } //Aqui se acaba el bucle grandote
+    if (heroe->getPuntosDeVida() > 0) {
+        vista.mostrarMensaje("\nLa sala esta en silencio. Has vencido a todos.");
     }
 }
 

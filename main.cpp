@@ -1,6 +1,4 @@
 #include <iostream>
-// En main.cpp (o donde inicialices el Controlador)
-#include <cstdlib> // Para srand()
 #include <ctime>   // Para time()
 #include "Controlador.h"
 
