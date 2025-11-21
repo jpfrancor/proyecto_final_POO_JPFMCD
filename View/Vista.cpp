@@ -91,7 +91,7 @@ void Vista::mostrarLugar(Habitacion* habitacion) {
         }
         std::cout << endl;
     } else {
-        std::cout << "(Zona despejada)" << endl;
+        std::cout << "(Peligro de Zona Actual: Zona despejada)" << endl;
     }
 }
 

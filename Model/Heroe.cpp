@@ -14,8 +14,7 @@ Heroe::Heroe(std::string nombre, std::string descripcion, int pv, int atk, int d
       nivel(1),
       experiencia(0)
 {
-    // Inicializamos puntosDeVidaMax igual a la vida inicial si no se hizo en Entidad
-    // this->puntosDeVidaMax = pv;
+    // Inicializamos puntosDeVidaMax igual a la vida inicial
     std::cout << "¡El Caballero " << this->nombre << " ha comenzado su aventura!" << std::endl;
 }
 
@@ -30,18 +29,17 @@ void Heroe::ganarExperiencia(int expObtenida) {
     this->experiencia += expObtenida;
     std::cout << this->nombre << " ganó " << expObtenida << " EXP." << std::endl;
 
-    // Corregido: 'expToLevelUp' cambiado a 'xpLevelUp' y 'maxNivelL' a 'maxNivel'
     while (this->experiencia >= xpLevelUp && nivel < maxNivel) {
         subirDeNivel();
     }
 }
 
 void Heroe::subirDeNivel() {
-    // 1. Aumentar nivel y resetear experiencia
+    // Aumentar nivel y resetear experiencia
     this->nivel++;
     this->experiencia -= xpLevelUp; // Corregido nombre variable
 
-    // 2. Mejorar stats
+    // Mejorar stats
     this->puntosDeVidaMax += 20;    // Aumentamos el TOPE de vida
     this->puntosDeVida = this->puntosDeVidaMax; // Restauramos la vida al máximo al subir nivel
     this->ataque += 5;

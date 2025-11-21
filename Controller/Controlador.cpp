@@ -31,7 +31,7 @@ void Controlador::inicializarMapa() {
     Habitacion* pasillo = new Habitacion("Pasillo Principal", "Entras al calabozo, dispuesto a salvar a tu hija. Tus ojos se adaptan a la poca luz, solo algunas antorchas iluminan tu camino.\nEl pasillo se extiende hacia la oscuridad, no ves su final, pero escuchas el traqueteo de...huesos?", 1);
     Habitacion* armeria = new Habitacion("Armeria Abandonada", "Entre estantes rotos y armas oxidadas entras a una antigua armeria. \nNo hay mucho que ver, salvo una pequenna vitrina con lo que parece ser una lanza. \nEspera, algo grande se mueve...", 2);
     Habitacion* celda = new Habitacion("Celda Decrepita", "Si hay guardias, hay prisioneros, y este sitio lo demuestra. Filas y filas de rejas esconden los restos \nde aventureros menos afortunados...pero algunos no estan del todo muertos.",2);
-    Habitacion* cementerio = new Habitacion("Cementerio", "Al parecer hay mas muertos aqui de lo que pensabas. Sales del pasillo a una crater boscoso al aire libre, rodeado por riscos que impiden tu escape, donde tumbas yacen a la luz de la luna. Ten cuidado con el ejercito de esqueletos!",3);
+    Habitacion* cementerio = new Habitacion("Cementerio", "Al parecer hay mas muertos aqui de lo que pensabas. Sales del pasillo a un crater boscoso al aire libre, rodeado por \nriscos que impiden tu escape, donde tumbas yacen a la luz de la luna. Ten cuidado con el ejercito de esqueletos!",3);
     Habitacion* laberinto = new Habitacion("Laberinto Interminable", "Pasando el cementerio, el calabozo vuelve a apoderarse del lugar, cerrando el camino a una serie de pasillos interminables con enemigos que aun vagan, perdidos.",4);
 
     Habitacion* salaMala1 = new Habitacion("Callejon sin Salida", "El laberinto no perdona, y te ha arrojado a una sala sin avance, pero repleta de enemigos sedientos de sangre.",5);
@@ -39,12 +39,12 @@ void Controlador::inicializarMapa() {
 
     Habitacion* salaFinal = new Habitacion("Trono de la Engendra", "Pasando el cementerio, el calabozo vuelve a apoderarse del lugar, cerrando el camino a una serie de pasillos interminables con enemigos que aun vagan, perdidos.",5);
 
-    Habitacion* salaTrono = new Habitacion("Sala del Trono", "El aire es pesado aqui. El Jefe espera.", 3);
+    Habitacion* salaTrono = new Habitacion("Sala del Trono", "El aire es pesado aqui. Algo antiguo y maligno acecha en la oscuridad. \nVes a una mujer...o un monstruo? Una mezcla horripilante.\nSe retuerce como serpiente con sus 6 brazos, y se rie de tu esfuerzo inutil. \nAunque te aterra...en sus ojos detectas algo, miedo, quiza?", 5);
     mapaGlobal.clear();
     mapaGlobal.push_back(entrada);
     mapaGlobal.push_back(pasillo);
     mapaGlobal.push_back(armeria);
-    mapaGlobal.push_back(salaFinal);
+    mapaGlobal.push_back(salaTrono);
     mapaGlobal.push_back(celda);
     mapaGlobal.push_back(cementerio);
     mapaGlobal.push_back(laberinto);
@@ -84,21 +84,21 @@ void Controlador::inicializarMapa() {
     celda->agregarEnemigo(new Esqueleto("Esqueleto Aventurero", "Un aventurero del pasado.", 20, 5, 1));
     celda->agregarEnemigo(new Guardia("Guardia Enfurecido", "No debiste molestar a sus prisioneros.", 40, 15, 5));
 
-    cementerio->agregarEnemigo(new Esqueleto("Esqueleto (1/5)", "Se aproxima un ejercito.", 30, 10, 3));
-    cementerio->agregarEnemigo(new Esqueleto("Esqueleto (2/5)", "Se aproxima un ejercito.", 30, 10, 3));
-    cementerio->agregarEnemigo(new Esqueleto("Esqueleto (3/5)", "Se aproxima un ejercito.", 30, 10, 3));
-    cementerio->agregarEnemigo(new Esqueleto("Esqueleto (4/5)", "Se aproxima un ejercito.", 30, 10, 3));
-    cementerio->agregarEnemigo(new Esqueleto("Jefe Esqueleto (5/5)", "Se aproxima un ejercito.", 50, 20, 6));
+    cementerio->agregarEnemigo(new Esqueleto("Esqueleto (1/5)", "Se aproxima un ejercito.", 30, 15, 3));
+    cementerio->agregarEnemigo(new Esqueleto("Esqueleto (2/5)", "Se aproxima un ejercito.", 30, 15, 3));
+    cementerio->agregarEnemigo(new Esqueleto("Esqueleto (3/5)", "Se aproxima un ejercito.", 30, 15, 3));
+    cementerio->agregarEnemigo(new Esqueleto("Esqueleto (4/5)", "Se aproxima un ejercito.", 30, 15, 3));
+    cementerio->agregarEnemigo(new Esqueleto("Jefe Esqueleto (5/5)", "Se aproxima un ejercito.", 50, 25, 6));
 
-    salaMala1->agregarEnemigo(new Guardia("Guardia Gigante", "Dificil de esquivar.", 100, 70, 20));
+    salaMala1->agregarEnemigo(new Guardia("Guardia Gigante", "Dificil de esquivar.", 100, 80, 25));
 
-    salaMala2->agregarEnemigo(new Esqueleto("Esqueleto de Oro", "No se rompe el maldito.", 150, 50, 30));
+    salaMala2->agregarEnemigo(new Esqueleto("Esqueleto de Oro", "No se rompe el maldito.", 150, 60, 35));
 
-    salaFinal->agregarEnemigo(new Jefe("Chameni, Engendra del Calabozo", "Una entidad maligna hecha mujer, personificacion del calabozo.", 200, 85, 30));
+    salaFinal->agregarEnemigo(new Jefe("Chameni, Engendra del Calabozo", "Una entidad maligna hecha mujer, personificacion del calabozo.", 200, 55, 30));
 
     //Agregamos Interacciones
     // Caja en la entrada y carta
-    Item* hierbas1 = new Curativo("Hierbas", "Curacion baja. +5HP.", 5);
+    Item* hierbas1 = new Curativo("Hierbas", "Curacion baja. +10HP.", 10);
     entrada->agregarInteraccion(new LugarDeInteraccion("Caja", "Una caja de cargamento antigua, no se sabe quien la dejo ahi.", hierbas1, 0));
     entrada->agregarInteraccion(new LugarDeInteraccion("Papel", "Ves un pedazo de papel, al acercarte, descubres que en realidad es una hoja arrancada de un diario.\n'Los que entran aqui no salen iguales. Da la vuelta.'", nullptr, 0));
 
@@ -106,7 +106,7 @@ void Controlador::inicializarMapa() {
     pasillo->agregarInteraccion(new LugarDeInteraccion("Letreros Grabados", "Dos letreros yacen en lo alto del pasillo, uno apuntando al Este y otro al Oeste.\nHacia el Este: Un dibujo de una espada.\nHacia el Oeste: Un dibujo de una puerta con barrotes.", nullptr, 0));
 
     // Vitrina en la armería
-    Item* lanzaArmeria = new Arma("Lanza","Una lanza de caballeria, ideal para atravesar enemigos que se acercan demasiado. +5ATK.",  5);
+    Item* lanzaArmeria = new Arma("Lanza","Una lanza de caballeria, ideal para atravesar enemigos que se acercan demasiado. +7ATK.", 7);
     armeria->agregarInteraccion(new LugarDeInteraccion("Expositor de Armas", "Vitrina rota, una vieja lanza yace dentro.", lanzaArmeria, 0));
 
     // Curacion en el cementerio
@@ -301,7 +301,7 @@ void Controlador::procesarCombate() {
                 return; // Salimos del combate
             }
 
-            heroe->ganarExperiencia(50);
+            heroe->ganarExperiencia(55);
         }
     } //Aqui se acaba el bucle grandote
     if (heroe->getPuntosDeVida() > 0) {

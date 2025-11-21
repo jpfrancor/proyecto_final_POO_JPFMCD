@@ -16,8 +16,8 @@ private:
     int experiencia;
 
 
-    const int xpLevelUp = 100;
-    const int maxNivel = 3;
+    const int xpLevelUp = 125;
+    const int maxNivel = 4;
 
     Arma* armaEquipada = nullptr;
     Armadura* armaduraEquipada = nullptr;
